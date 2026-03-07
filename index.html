@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>ChromeOS Flex · migration quote</title>
-    <!-- Apple-inspired design · fully responsive · laptop + mobile -->
+    <!-- EmailJS library -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!-- Apple-inspired design · fully responsive · 60% width on large screens -->
     <style>
         * {
             margin: 0;
@@ -22,7 +24,7 @@
             padding: 20px;
         }
 
-        /* main card adapts — on laptop it's like a refined iphone mockup, on mobile it's edge to edge */
+        /* main card adapts — now 60% width on large screens */
         .quote-card {
             max-width: 460px;
             width: 100%;
@@ -35,13 +37,21 @@
             border: 1px solid rgba(255,255,255,0.7);
         }
 
-        /* laptop: larger comfortable padding */
+        /* laptop: larger comfortable padding and 60% width */
         @media (min-width: 768px) {
             .quote-card {
-                max-width: 600px;
+                max-width: 60%;
                 border-radius: 56px;
                 padding: 42px 40px;
                 box-shadow: 0 40px 70px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.02) inset;
+            }
+        }
+
+        /* even larger screens: cap at 1000px for readability, but still 60% of width */
+        @media (min-width: 1400px) {
+            .quote-card {
+                max-width: 60%;
+                width: 60%;
             }
         }
 
@@ -50,6 +60,7 @@
             .quote-card {
                 padding: 24px 18px;
                 border-radius: 36px;
+                max-width: 100%;
             }
         }
 
@@ -73,7 +84,7 @@
             background: #e9f0fe;
             border-radius: 32px;
             padding: 18px 22px;
-            margin: 24px 0 32px 0;
+            margin: 24px 0 16px 0;
             border-left: 8px solid #007aff;
             box-shadow: 0 4px 14px rgba(0,122,255,0.15);
             display: flex;
@@ -106,6 +117,34 @@
         @media (max-width: 420px) {
             .consult-banner { flex-direction: column; align-items: flex-start; }
             .phone-badge { align-self: stretch; text-align: center; }
+        }
+
+        /* explanatory section */
+        .info-message {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 20px 22px;
+            margin: 16px 0 24px 0;
+            border: 1.5px dashed #007aff;
+            box-shadow: 0 4px 12px rgba(0,122,255,0.08);
+        }
+        .info-message p {
+            font-size: 1.15rem;
+            line-height: 1.4;
+            color: #1c1c1e;
+            font-weight: 460;
+        }
+        .info-message strong {
+            color: #007aff;
+            font-weight: 650;
+        }
+        .info-message .price-highlight {
+            background: #007aff10;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 8px;
         }
 
         /* section headings */
@@ -196,49 +235,57 @@
             margin-left: 12px;
         }
 
-        /* optional extra (checkbox) */
-        .extra-card {
-            background: white;
-            border-radius: 24px;
-            padding: 18px 22px;
-            border: 1.5px solid #e1e1e6;
-            display: flex;
-            align-items: center;
-            margin: 12px 0 18px;
-            cursor: pointer;
-            transition: 0.2s;
+        /* photo upload section */
+        .photo-section {
+            background: #f8f8fa;
+            border-radius: 28px;
+            padding: 24px 22px;
+            margin: 36px 0 24px 0;
+            border: 2px dashed #007aff;
+            text-align: center;
         }
-        .extra-card:hover {
-            border-color: #007aff;
-            background: #f8faff;
-        }
-        .extra-card.selected {
-            border-color: #007aff;
-            background: #f0f7ff;
-        }
-        .extra-card input[type="checkbox"] {
-            appearance: none;
-            width: 28px;
-            height: 28px;
-            border: 2.5px solid #b8b8c9;
-            border-radius: 10px;
-            margin-right: 18px;
-            transition: 0.1s;
-            flex-shrink: 0;
-        }
-        .extra-card input[type="checkbox"]:checked {
-            border-color: #007aff;
-            background: #007aff;
-            box-shadow: inset 0 0 0 2px white;
-        }
-        .extra-card label {
+        .photo-section p {
             font-size: 1.1rem;
-            font-weight: 480;
-            flex: 1;
+            margin-bottom: 16px;
+            color: #1c1c1e;
+            font-weight: 500;
+        }
+        .photo-label {
+            background: white;
+            border: 1.5px solid #007aff;
+            border-radius: 40px;
+            padding: 14px 24px;
+            display: inline-block;
+            font-weight: 600;
+            color: #007aff;
             cursor: pointer;
+            transition: 0.15s;
+            margin: 8px 0;
+        }
+        .photo-label:hover {
+            background: #007aff;
+            color: white;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .photo-preview {
+            margin-top: 16px;
+            font-size: 0.95rem;
+            color: #28a745;
+            font-weight: 500;
+        }
+        .photo-required-badge {
+            background: #ff3b3010;
+            color: #ff3b30;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-top: 12px;
         }
 
-        /* summary panel */
+        /* summary panel - updated to show placeholder when no selection */
         .summary-panel {
             background: #f1f3f6;
             border-radius: 32px;
@@ -264,13 +311,21 @@
             margin-top: 16px;
             letter-spacing: -0.02em;
         }
+        .placeholder-text {
+            color: #8e8e93;
+            font-style: italic;
+        }
         @media (max-width: 420px) {
             .total-row { font-size: 1.9rem; }
         }
 
-        /* email section */
+        /* email section - hidden by default */
         .email-area {
             margin: 24px 0 10px;
+            transition: opacity 0.3s ease;
+        }
+        .email-area.hidden {
+            display: none;
         }
         .email-label {
             font-weight: 540;
@@ -332,11 +387,17 @@
         .clickable-phone {
             cursor: pointer;
         }
-        /* laptop grid enhancement */
-        @media (min-width: 900px) {
-            .quote-card {
-                max-width: 720px;
-            }
+        .requirements-note {
+            background: #fff9e6;
+            border-radius: 24px;
+            padding: 14px 18px;
+            margin: 20px 0 10px;
+            border-left: 6px solid #ffb340;
+            font-weight: 500;
+        }
+        .requirements-note.success {
+            background: #e6f7e6;
+            border-left-color: #28a745;
         }
     </style>
 </head>
@@ -350,6 +411,13 @@
             <div class="phone-badge clickable-phone" onclick="window.location.href='tel:07809590652'">07809590652</div>
         </div>
 
+        <!-- explanatory section about basic migration pricing -->
+        <div class="info-message">
+            <p>💡 <strong>Basic migration is £50</strong> — this covers the standard ChromeOS Flex installation on your device.</p>
+            <p>If you need help preserving your photos, documents, or other important data, additional costs may apply based on the options below.</p>
+            <div class="price-highlight">Additional data care options available</div>
+        </div>
+
         <!-- OPTION 1 block -->
         <div class="section-label">
             Option 1 <small>data migration</small>
@@ -361,11 +429,11 @@
         <div class="radio-grid" id="migrationGroup">
             <!-- radio 1: no (self backup) £50 -->
             <div class="radio-card" id="radioNo">
-                <input type="radio" name="migration" id="migNo" value="no" checked>
+                <input type="radio" name="migration" id="migNo" value="no">
                 <label for="migNo">No, I've already backed up myself</label>
                 <span class="price-chip">£50</span>
             </div>
-            <!-- radio 2: yes assistance £95 (professional help) -->
+            <!-- radio 2: yes assistance £95 -->
             <div class="radio-card" id="radioYes">
                 <input type="radio" name="migration" id="migYes" value="yes">
                 <label for="migYes">Yes, I require full assistance</label>
@@ -373,7 +441,7 @@
             </div>
         </div>
 
-        <!-- OPTION 2 Reversible backup (new) -->
+        <!-- OPTION 2 Reversible backup -->
         <div class="section-label" style="margin-top: 32px;">
             Option 2 <small>reversible backup</small>
         </div>
@@ -382,49 +450,51 @@
         </div>
 
         <div class="radio-grid" id="reversibleGroup">
-            <!-- radio no: no revert, happy with permanent change £0 -->
+            <!-- radio no: permanent change £0 -->
             <div class="radio-card" id="reversibleNo">
-                <input type="radio" name="reversible" id="revNo" value="no" checked>
+                <input type="radio" name="reversible" id="revNo" value="no">
                 <label for="revNo">No, I fully understand ChromeOS Flex and I'm happy for the change to be permanent with no way back</label>
                 <span class="price-chip">£0</span>
             </div>
-            <!-- radio yes: USB boot backup +£100 -->
+            <!-- radio yes: exact clone USB -->
             <div class="radio-card" id="reversibleYes">
                 <input type="radio" name="reversible" id="revYes" value="yes">
-                <label for="revYes">Yes, I would like to buy a USB stick to boot back into my current setup (requires USB stick always plugged in)</label>
+                <label for="revYes">Yes, I would an exact clone of every aspect of my system, so that upon request I can revert back to exactly before the change to Chrome OS Flex was made</label>
                 <span class="price-chip">+ £100</span>
             </div>
         </div>
 
-        <!-- additional service (optional) – kept as extra -->
-        <div style="margin-top: 32px;">
-            <div style="font-weight: 600; font-size: 1.2rem; margin-bottom: 12px; color: #2c2c2e;">➕ Optional extras</div>
-            <div class="extra-card" id="wipeCard">
-                <input type="checkbox" id="wipeCheck">
-                <label for="wipeCheck">Secure disk wipe & ChromeOS Flex install</label>
-                <span class="price-chip">£40</span>
-            </div>
+        <!-- PHOTO UPLOAD SECTION -->
+        <div class="photo-section">
+            <p>📸 <strong>Upload at least one photo</strong> of the sticker on the back or bottom of the laptop clearly showing the make and model number</p>
+            
+            <label for="photoUpload" class="photo-label">📁 Choose Photo</label>
+            <input type="file" id="photoUpload" accept="image/*" multiple>
+            
+            <div id="photoPreview" class="photo-preview"></div>
+            <div id="photoRequired" class="photo-required-badge">⚠️ At least one photo required before sending quote</div>
         </div>
 
         <!-- live quote summary -->
         <div class="summary-panel" id="summary">
             <div class="summary-row">
                 <span>Data migration</span>
-                <span id="sumMig">£50 (self backup)</span>
+                <span id="sumMig" class="placeholder-text">not selected</span>
             </div>
             <div class="summary-row">
                 <span>Reversible backup (USB)</span>
-                <span id="sumRev">not added</span>
+                <span id="sumRev" class="placeholder-text">not selected</span>
             </div>
-            <div class="summary-row">
-                <span>Wipe + install</span>
-                <span id="sumWipe">not added</span>
-            </div>
-            <div class="total-row" id="totalPrice">£50</div>
+            <div class="total-row" id="totalPrice">—</div>
         </div>
 
-        <!-- email form to send to nevillebryce@gmail.com -->
-        <div class="email-area">
+        <!-- requirements note (visible until all conditions met) -->
+        <div id="requirementsNote" class="requirements-note">
+            ⏳ Please select an option from each section and upload at least one photo to enable the quote email form
+        </div>
+
+        <!-- email form (hidden until all options selected and photo uploaded) -->
+        <div class="email-area hidden" id="emailSection">
             <div class="email-label">📧 Email final quote to nevillebryce@gmail.com</div>
             <div class="email-flex">
                 <input type="email" id="customerEmail" placeholder="your email (optional for copy)" value="">
@@ -436,11 +506,13 @@
         </div>
 
         <hr>
-        <!-- footer removed as requested -->
     </div>
 
     <script>
         (function() {
+            // Initialize EmailJS with your public key
+            emailjs.init("K160_i8A3AXGSYFFl"); 
+            
             // DOM elements
             const migNo = document.getElementById('migNo');
             const migYes = document.getElementById('migYes');
@@ -453,84 +525,153 @@
             const revNoDiv = document.getElementById('reversibleNo');
             const revYesDiv = document.getElementById('reversibleYes');
 
-            const wipeCheck = document.getElementById('wipeCheck');
-            const wipeCard = document.getElementById('wipeCard');
+            // photo upload
+            const photoUpload = document.getElementById('photoUpload');
+            const photoPreview = document.getElementById('photoPreview');
+            const photoRequired = document.getElementById('photoRequired');
+
+            // summary elements
             const sumMig = document.getElementById('sumMig');
             const sumRev = document.getElementById('sumRev');
-            const sumWipe = document.getElementById('sumWipe');
             const totalSpan = document.getElementById('totalPrice');
+
+            // email section
+            const emailSection = document.getElementById('emailSection');
+            const requirementsNote = document.getElementById('requirementsNote');
             const sendBtn = document.getElementById('sendEmailBtn');
             const emailInput = document.getElementById('customerEmail');
             const statusDiv = document.getElementById('emailStatus');
 
-            // prices
-            let migrationPrice = 50;   // default: no option
-            let migrationLabel = 'self backup';
-            let reversiblePrice = 0;    // default: no reversible
-            let reversibleLabel = 'not added';
+            // state
+            let migrationSelected = false;
+            let migrationPrice = 0;
+            let migrationLabel = '';
+            
+            let reversibleSelected = false;
+            let reversiblePrice = 0;
+            let reversibleLabel = '';
+            
+            let photosUploaded = false;
+            let photoCount = 0;
 
             function updateSummaryAndUI() {
-                // migration
+                // Check migration selection
                 if (migYes.checked) {
+                    migrationSelected = true;
                     migrationPrice = 95;
                     migrationLabel = 'assistance';
-                } else {
+                    sumMig.innerText = `£95 (assistance)`;
+                    sumMig.classList.remove('placeholder-text');
+                } else if (migNo.checked) {
+                    migrationSelected = true;
                     migrationPrice = 50;
                     migrationLabel = 'self backup';
+                    sumMig.innerText = `£50 (self backup)`;
+                    sumMig.classList.remove('placeholder-text');
+                } else {
+                    migrationSelected = false;
+                    migrationPrice = 0;
+                    migrationLabel = '';
+                    sumMig.innerText = 'not selected';
+                    sumMig.classList.add('placeholder-text');
                 }
 
-                // reversible
+                // Check reversible selection
                 if (revYes.checked) {
+                    reversibleSelected = true;
                     reversiblePrice = 100;
-                    reversibleLabel = 'USB backup (+£100)';
-                } else {
+                    reversibleLabel = 'USB clone (+£100)';
+                    sumRev.innerText = 'USB clone (+£100)';
+                    sumRev.classList.remove('placeholder-text');
+                } else if (revNo.checked) {
+                    reversibleSelected = true;
                     reversiblePrice = 0;
                     reversibleLabel = 'not added';
+                    sumRev.innerText = 'not added';
+                    sumRev.classList.remove('placeholder-text');
+                } else {
+                    reversibleSelected = false;
+                    reversiblePrice = 0;
+                    reversibleLabel = '';
+                    sumRev.innerText = 'not selected';
+                    sumRev.classList.add('placeholder-text');
                 }
 
-                // wipe
-                const wipeAdded = wipeCheck.checked;
-                const wipeCost = wipeAdded ? 40 : 0;
-                const wipeText = wipeAdded ? 'wipe + install (£40)' : 'not added';
+                // Calculate total if both selected
+                if (migrationSelected && reversibleSelected) {
+                    const total = migrationPrice + reversiblePrice;
+                    totalSpan.innerText = `£${total}`;
+                } else {
+                    totalSpan.innerText = '—';
+                }
 
-                // total
-                const total = migrationPrice + reversiblePrice + wipeCost;
-
-                // update summary fields
-                sumMig.innerText = `£${migrationPrice} (${migrationLabel})`;
-                sumRev.innerText = reversibleLabel;
-                sumWipe.innerText = wipeText;
-                totalSpan.innerText = `£${total}`;
-
-                // highlight selected radio (migration)
+                // Update selected highlights
                 document.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
                 if (migYes.checked) {
                     radioYesDiv.classList.add('selected');
-                } else {
+                } else if (migNo.checked) {
                     radioNoDiv.classList.add('selected');
                 }
 
-                // highlight reversible
                 if (revYes.checked) {
                     revYesDiv.classList.add('selected');
-                } else {
+                } else if (revNo.checked) {
                     revNoDiv.classList.add('selected');
                 }
 
-                // highlight extra
-                if (wipeCheck.checked) {
-                    wipeCard.classList.add('selected');
+                // Check all conditions for showing email section
+                checkAllConditions();
+            }
+
+            function checkAllConditions() {
+                // Conditions: both sections have a selection AND at least one photo uploaded
+                if (migrationSelected && reversibleSelected && photosUploaded) {
+                    emailSection.classList.remove('hidden');
+                    requirementsNote.classList.add('hidden');
                 } else {
-                    wipeCard.classList.remove('selected');
+                    emailSection.classList.add('hidden');
+                    requirementsNote.classList.remove('hidden');
+                    
+                    // Update requirements note message based on what's missing
+                    let message = '⏳ ';
+                    if (!migrationSelected && !reversibleSelected && !photosUploaded) {
+                        message += 'Please select an option from each section and upload at least one photo';
+                    } else if (!migrationSelected && !reversibleSelected) {
+                        message += 'Please select an option from both sections';
+                    } else if (!migrationSelected) {
+                        message += 'Please select a data migration option';
+                    } else if (!reversibleSelected) {
+                        message += 'Please select a reversible backup option';
+                    } else if (!photosUploaded) {
+                        message += 'Please upload at least one photo of your laptop';
+                    }
+                    requirementsNote.innerText = message;
                 }
             }
 
-            // Event listeners
+            // Photo upload handler
+            photoUpload.addEventListener('change', function(e) {
+                const files = e.target.files;
+                photoCount = files.length;
+                
+                if (photoCount > 0) {
+                    photosUploaded = true;
+                    photoPreview.innerHTML = `✅ ${photoCount} photo(s) selected`;
+                    photoRequired.style.opacity = '0.5';
+                } else {
+                    photosUploaded = false;
+                    photoPreview.innerHTML = '';
+                    photoRequired.style.opacity = '1';
+                }
+                
+                checkAllConditions();
+            });
+
+            // Event listeners for radio buttons
             migNo.addEventListener('change', updateSummaryAndUI);
             migYes.addEventListener('change', updateSummaryAndUI);
             revNo.addEventListener('change', updateSummaryAndUI);
             revYes.addEventListener('change', updateSummaryAndUI);
-            wipeCheck.addEventListener('change', updateSummaryAndUI);
 
             // Click on cards for easier selection
             radioNoDiv.addEventListener('click', function(e) {
@@ -557,61 +698,56 @@
                     updateSummaryAndUI();
                 }
             });
-            wipeCard.addEventListener('click', function(e) {
-                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'LABEL' && e.target.tagName !== 'SPAN') {
-                    wipeCheck.checked = !wipeCheck.checked;
-                    updateSummaryAndUI();
-                }
-            });
 
-            // initial update
+            // Initial update (will show placeholders since nothing selected)
             updateSummaryAndUI();
 
-            // ---------- EMAIL simulation (connects conceptually to google email servers) ----------
-            function generateQuoteBody() {
-                const migrationSelected = migYes.checked ? 'Yes - assistance (£95)' : 'No - self backup (£50)';
-                const reversibleSelected = revYes.checked ? 'Yes - USB backup (+£100)' : 'No';
-                const wipeSelected = wipeCheck.checked ? 'Yes (+ £40)' : 'No';
-                const total = (migrationPrice + (revYes.checked ? 100 : 0) + (wipeCheck.checked ? 40 : 0));
-                const customer = emailInput.value.trim() || 'not provided';
-
-                return `
-ChromeOS Flex migration quote
-================================
-Free consultation: 07809590652
-Data migration: ${migrationSelected}
-Reversible backup: ${reversibleSelected}
-Secure wipe & install: ${wipeSelected}
-TOTAL QUOTE: £${total}
-Customer email: ${customer}
-                `.trim();
-            }
-
+            // EmailJS send function
             sendBtn.addEventListener('click', function() {
-                const body = generateQuoteBody();
-                const to = 'nevillebryce@gmail.com';
-                const subject = 'ChromeOS Flex migration quote';
+                if (!photosUploaded) {
+                    statusDiv.innerText = '❌ Please upload at least one photo first';
+                    statusDiv.style.color = '#ff3b30';
+                    return;
+                }
 
-                // demo simulation — shows success and logs to console
-                console.log('📨 SIMULATED send to ' + to + '\n\n' + body);
+                if (!migrationSelected || !reversibleSelected) {
+                    statusDiv.innerText = '❌ Please select all options first';
+                    statusDiv.style.color = '#ff3b30';
+                    return;
+                }
 
-                statusDiv.innerText = '⏳ connecting to Google email servers...';
+                // Show sending status
+                statusDiv.innerText = '⏳ Sending email...';
                 statusDiv.style.color = '#3a3a3c';
 
-                setTimeout(() => {
-                    statusDiv.innerText = '✅ Quote sent to nevillebryce@gmail.com (demo)';
-                    statusDiv.style.color = '#28a745';
-                }, 1200);
+                // Calculate total
+                const total = migrationPrice + reversiblePrice;
 
-                // Optional mailto fallback (user can send manually)
-                setTimeout(() => {
-                    if (confirm('Open default mail app to send a real copy?')) {
-                        window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-                    }
-                }, 300);
+                // Prepare template parameters
+                const templateParams = {
+                    to_email: 'nevillebryce@gmail.com',
+                    customer_email: emailInput.value || 'not provided',
+                    migration: migYes.checked ? 'Assistance (£95)' : 'Self backup (£50)',
+                    reversible: revYes.checked ? 'USB clone (+£100)' : 'Not added',
+                    total: total,
+                    photo_count: photoCount,
+                    phone: '07809590652'
+                };
+
+                // Send email using EmailJS
+                emailjs.send('service_lxc7ozk', 'template_p02s0a5', templateParams)
+                    .then(function(response) {
+                        statusDiv.innerText = '✅ Quote sent to nevillebryce@gmail.com!';
+                        statusDiv.style.color = '#28a745';
+                        console.log('SUCCESS!', response.status, response.text);
+                    }, function(error) {
+                        statusDiv.innerText = '❌ Failed to send email. Please try again.';
+                        statusDiv.style.color = '#ff3b30';
+                        console.log('FAILED...', error);
+                    });
             });
 
-            // make phone clickable from anywhere
+            // make phone clickable
             document.querySelector('.phone-badge').addEventListener('click', function(e) {
                 window.location.href = 'tel:07809590652';
             });
