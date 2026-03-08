@@ -88,6 +88,43 @@
             }
         }
 
+        /* link section - NEW */
+        .links-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin: 16px 0 20px 0;
+        }
+        .info-link {
+            background: #f0f7ff;
+            border-radius: 40px;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: #007aff;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border: 1px solid #007aff30;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .info-link:hover {
+            background: #007aff;
+            color: white;
+            border-color: #007aff;
+        }
+        .info-link.youtube-link {
+            background: #ffebeb;
+            color: #ff0000;
+            border-color: #ff000030;
+        }
+        .info-link.youtube-link:hover {
+            background: #ff0000;
+            color: white;
+        }
+
         .consult-banner {
             background: #e9f0fe;
             border-radius: 32px;
@@ -374,7 +411,7 @@
             color: #1c1c1e;
         }
 
-        /* photo upload section - UPDATED TEXT */
+        /* photo upload section */
         .photo-section {
             background: #f8f8fa;
             border-radius: 28px;
@@ -541,6 +578,16 @@
         <h1>ChromeOS Flex Migration<br>Self‑Pricing Made Simple</h1>
         <div class="subheadline">Answer a few questions to get an instant quote for your ChromeOS Flex migration</div>
 
+        <!-- NEW: Links section at the top -->
+        <div class="links-section">
+            <a href="https://support.google.com/chromebook/answer/3265094?hl=en-GB#zippy=%2Cdoes-microsoft-office-work-on-a-chromebook" target="_blank" class="info-link">
+                <span>📚</span> ChromeOS FAQ (Microsoft Office, etc.)
+            </a>
+            <a href="https://www.youtube.com/watch?v=OXaHt9pZCa8" target="_blank" class="info-link youtube-link">
+                <span>▶️</span> Watch Explainer Video
+            </a>
+        </div>
+
         <!-- consultation banner with phone -->
         <div class="consult-banner">
             <span>📅 Free 10 minute consultation with Neville</span>
@@ -551,7 +598,7 @@
         <div class="eligibility-section">
             <div class="eligibility-title">✨ Is this migration right for you?</div>
             
-            <!-- Question 1 - Computer Age - UPDATED TEXT -->
+            <!-- Question 1 - Computer Age -->
             <div class="eligibility-question">1️⃣ Roughly what age is the computer?</div>
             <div class="eligibility-radio-group" id="ageGroup">
                 <div class="eligibility-radio-card" id="ageNew">
@@ -579,12 +626,12 @@
             </div>
             <div id="physicalFeedback" class="eligibility-feedback" style="display: none;"></div>
 
-            <!-- Question 3 - RAM Knowledge - UPDATED TEXT -->
+            <!-- Question 3 - RAM Knowledge -->
             <div class="eligibility-question">3️⃣ Do you know how much RAM is inside the computer?</div>
             <div class="eligibility-radio-group" id="ramGroup">
                 <div class="eligibility-radio-card" id="ramYes">
                     <input type="radio" name="ramKnowledge" id="ramKnown" value="yes">
-                    <label for="ramKnown">Yes, I know that there is at least a minimum of 4GB of RAM that will be used for light browsing, emails and watching television or 8GB of RAM that I can use for a home office setup providing lots of multitasking productivity and office documents open at once</label>
+                    <label for="ramKnown">Yes, I know that there is at least a minimum of 4GB of RAM that will be used for light browsing, emails and watching television <strong>OR</strong> 8GB of RAM that I can use for a home office setup providing lots of multitasking productivity and office documents open at once</label>
                 </div>
                 <div class="eligibility-radio-card" id="ramNo">
                     <input type="radio" name="ramKnowledge" id="ramUnknown" value="no">
@@ -674,11 +721,11 @@
                     <label for="migNo">No, I've already backed up myself</label>
                     <span class="price-chip">£70</span>
                 </div>
-                <!-- radio 2: yes assistance £20 for 30 mins -->
+                <!-- radio 2: yes assistance £70 + £20 for 30 mins -->
                 <div class="radio-card" id="radioYes">
                     <input type="radio" name="migration" id="migYes" value="yes">
                     <label for="migYes">Yes, I require assistance selecting what data is required to be migrated and would appreciate consultation on this matter</label>
-                    <span class="price-chip">£20 (30 mins)</span>
+                    <span class="price-chip">£70 + £20 (30 mins)</span>
                 </div>
             </div>
 
@@ -697,9 +744,9 @@
                 </div>
             </div>
 
-            <!-- OPTION 2 Reversible backup - UPDATED TEXT AND FEEDBACK -->
+            <!-- OPTION 2 Reversible backup -->
             <div class="section-label" style="margin-top: 20px;">
-                Option 2 <small>reversible backup</small>
+                Option 2 <small>reversible clone</small>
             </div>
             <div class="question-text">
                 Do you want the change to be fully reversible in the event that you need to get the system back to how it is now?
@@ -712,18 +759,18 @@
                     <label for="revNo">No, I understand what ChromeOS Flex is and I'm happy for the change to be permanent with no way back</label>
                     <span class="price-chip">£0</span>
                 </div>
-                <!-- radio yes: exact clone USB - UPDATED TEXT -->
+                <!-- radio yes: exact clone USB -->
                 <div class="radio-card" id="reversibleYes">
                     <input type="radio" name="reversible" id="revYes" value="yes">
                     <label for="revYes">Yes, I would an exact clone of every aspect of my system, so that upon request I can revert back to exactly how it was before the change to Chrome OS Flex was made</label>
-                    <span class="price-chip">+ £100</span>
+                    <span class="price-chip">Clone (+£100)</span>
                 </div>
             </div>
 
-            <!-- Clone feedback section (hidden by default) -->
+            <!-- Clone feedback section (hidden by default) - UPDATED TEXT -->
             <div id="cloneFeedback" class="conditional-section" style="display: none;">
                 <div class="conditional-title">🔄 Advanced Clone Information</div>
-                <p style="margin: 0; line-height: 1.5;">Advanced software will be used to preserve the low level technical details of the computer so that it can be fully restored to the exact running state that it is in today. A suitable storage device will be provided at no extra cost holding the complete clone of the current configuration.</p>
+                <p style="margin: 0; line-height: 1.5;">Advanced software will be used to preserve the low level technical details of the computer so that it can be fully restored to the exact running state that it is in today. A suitable storage device will be provided at no extra cost holding the complete clone of the current configuration. The clone will be stored in a manner that is not accessible to the user, and if the user also requires access to specific files after the migration then please also select the option above for data migration.</p>
             </div>
 
             <!-- Collection and Return Option -->
@@ -786,7 +833,7 @@
             });
         </script>
 
-        <!-- PHOTO UPLOAD SECTION - UPDATED TEXT -->
+        <!-- PHOTO UPLOAD SECTION -->
         <div class="photo-section">
             <p>📸 <strong>Upload at least one photo</strong> of the sticker on the back or bottom of the computer clearly showing the make and model number. Detail is important here, so please provide as much information as possible so that I may identify the device.</p>
             <p style="font-size: 0.9rem; color: #666;">(If you selected "No" for RAM knowledge, please also upload a screenshot showing system information)</p>
@@ -805,7 +852,7 @@
                 <span id="sumMig" class="placeholder-text">not selected</span>
             </div>
             <div class="summary-row">
-                <span>Reversible backup (USB)</span>
+                <span>Reversible clone</span>
                 <span id="sumRev" class="placeholder-text">not selected</span>
             </div>
             <div class="summary-row">
@@ -968,9 +1015,9 @@
                 // Check migration selection
                 if (migYes.checked) {
                     migrationSelected = true;
-                    migrationPrice = 20;
-                    migrationLabel = 'Data consultation (£20)';
-                    sumMig.innerText = `£20 (data consultation)`;
+                    migrationPrice = 90; // £70 + £20
+                    migrationLabel = 'Data consultation (£70 + £20)';
+                    sumMig.innerText = `£70 + £20 (data consultation)`;
                     sumMig.classList.remove('placeholder-text');
                 } else if (migNo.checked) {
                     migrationSelected = true;
@@ -990,8 +1037,8 @@
                 if (revYes.checked) {
                     reversibleSelected = true;
                     reversiblePrice = 100;
-                    reversibleLabel = 'USB clone (+£100)';
-                    sumRev.innerText = 'USB clone (+£100)';
+                    reversibleLabel = 'Clone (+£100)';
+                    sumRev.innerText = 'Clone (+£100)';
                     sumRev.classList.remove('placeholder-text');
                     toggleCloneFeedback();
                 } else if (revNo.checked) {
