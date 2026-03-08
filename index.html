@@ -71,6 +71,8 @@
             font-size: 0.95rem;
             margin-bottom: 16px;
             font-weight: 400;
+            line-height: 1.4;
+            padding: 0 8px;
         }
         @media (min-width: 768px) {
             h1 { font-size: 2.2rem; }
@@ -399,7 +401,7 @@
 <body>
     <div class="quote-card">
         <h1>ChromeOS Flex Migration<br>Self‑Pricing Made Simple</h1>
-        <div class="subheadline">Answer a few questions to get an instant quote</div>
+        <div class="subheadline">This is a short questionnaire on getting a quote for moving an older computer over to using ChromeOS as its operating system. It's good for computers as old as 12 years!<br><br>Please answer a few questions to get an instant quote that you can optionally send over.</div>
 
         <!-- Links section at the top -->
         <div class="links-section">
@@ -449,8 +451,8 @@
             </div>
             <div id="physicalFeedback" class="eligibility-feedback" style="display: none;"></div>
 
-            <!-- Question 3 - RAM Knowledge -->
-            <div class="eligibility-question">3️⃣ RAM knowledge?</div>
+            <!-- Question 3 - RAM Knowledge - UPDATED TEXT -->
+            <div class="eligibility-question">3️⃣ Do you know how much RAM is inside the computer? (Additional RAM can also be purchased)</div>
             <div class="eligibility-radio-group" id="ramGroup">
                 <div class="eligibility-radio-card" id="ramYes">
                     <input type="radio" name="ramKnowledge" id="ramKnown" value="yes">
@@ -458,14 +460,36 @@
                 </div>
                 <div class="eligibility-radio-card" id="ramNo">
                     <input type="radio" name="ramKnowledge" id="ramUnknown" value="no">
-                    <label for="ramUnknown">No - will provide screenshot</label>
+                    <label for="ramUnknown">No - will provide a photo of the model number</label>
+                </div>
+                <!-- NEW: RAM Upgrade Option -->
+                <div class="eligibility-radio-card" id="ramUpgrade">
+                    <input type="radio" name="ramKnowledge" id="ramUpgradeRadio" value="upgrade">
+                    <label for="ramUpgradeRadio">I want to upgrade the RAM</label>
                 </div>
             </div>
             <div id="ramFeedback" class="eligibility-feedback" style="display: none;"></div>
+
+            <!-- Conditional RAM upgrade options -->
+            <div id="ramUpgradeOptions" class="conditional-section" style="display: none;">
+                <div class="conditional-title">🔧 Select RAM upgrade</div>
+                <div class="eligibility-radio-group" id="ramUpgradeGroup">
+                    <div class="eligibility-radio-card" id="ram4gb">
+                        <input type="radio" name="ramUpgrade" id="ram4gbRadio" value="4gb">
+                        <label for="ram4gbRadio">4GB RAM upgrade</label>
+                        <span class="price-chip">£30</span>
+                    </div>
+                    <div class="eligibility-radio-card" id="ram8gb">
+                        <input type="radio" name="ramUpgrade" id="ram8gbRadio" value="8gb">
+                        <label for="ram8gbRadio">8GB RAM upgrade</label>
+                        <span class="price-chip">£50</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script>
-            // Eligibility feedback handling
+            // Eligibility feedback handling - UPDATED with RAM upgrade
             document.getElementById('age1_3').addEventListener('change', function() {
                 if(this.checked) {
                     document.getElementById('ageFeedback').style.display = 'block';
@@ -490,18 +514,35 @@
                     document.getElementById('physicalFeedback').innerHTML = '🔧 May need replacement - call to discuss.';
                 }
             });
-            document.getElementById('ramKnown').addEventListener('change', function() {
-                if(this.checked) {
+            
+            // RAM feedback handling with upgrade option
+            const ramKnown = document.getElementById('ramKnown');
+            const ramUnknown = document.getElementById('ramUnknown');
+            const ramUpgradeRadio = document.getElementById('ramUpgradeRadio');
+            const ramUpgradeOptions = document.getElementById('ramUpgradeOptions');
+            
+            function handleRAMChange() {
+                if (ramKnown.checked) {
                     document.getElementById('ramFeedback').style.display = 'block';
                     document.getElementById('ramFeedback').innerHTML = '✅ Great! RAM will be checked during migration.';
-                }
-            });
-            document.getElementById('ramUnknown').addEventListener('change', function() {
-                if(this.checked) {
+                    ramUpgradeOptions.style.display = 'none';
+                } else if (ramUnknown.checked) {
                     document.getElementById('ramFeedback').style.display = 'block';
-                    document.getElementById('ramFeedback').innerHTML = '📸 Please upload screenshot below.';
+                    document.getElementById('ramFeedback').innerHTML = '📸 Please upload photo of model number below.';
+                    ramUpgradeOptions.style.display = 'none';
+                } else if (ramUpgradeRadio.checked) {
+                    document.getElementById('ramFeedback').style.display = 'block';
+                    document.getElementById('ramFeedback').innerHTML = '🔧 Select your RAM upgrade below.';
+                    ramUpgradeOptions.style.display = 'block';
+                } else {
+                    document.getElementById('ramFeedback').style.display = 'none';
+                    ramUpgradeOptions.style.display = 'none';
                 }
-            });
+            }
+
+            ramKnown.addEventListener('change', handleRAMChange);
+            ramUnknown.addEventListener('change', handleRAMChange);
+            ramUpgradeRadio.addEventListener('change', handleRAMChange);
 
             // Click handlers for eligibility cards
             document.querySelectorAll('.eligibility-radio-card').forEach(card => {
@@ -663,6 +704,7 @@
             <div class="summary-row"><span>Data migration</span><span id="sumMig" class="placeholder-text">-</span></div>
             <div class="summary-row"><span>Reversible clone</span><span id="sumRev" class="placeholder-text">-</span></div>
             <div class="summary-row"><span>Collection</span><span id="sumColl" class="placeholder-text">-</span></div>
+            <div class="summary-row"><span>RAM upgrade</span><span id="sumRam" class="placeholder-text">-</span></div>
             <div class="summary-row"><span>USB storage</span><span id="sumUsb" class="placeholder-text">-</span></div>
             <div class="summary-row"><span>Google account</span><span id="sumGoogle" class="placeholder-text">-</span></div>
             <div class="total-row" id="totalPrice">—</div>
@@ -719,12 +761,20 @@
             const usbNoDiv = document.getElementById('usbNo');
             const usbQuestion = document.getElementById('usbQuestion');
             const cloneFeedback = document.getElementById('cloneFeedback');
+            
+            // RAM upgrade elements
+            const ram4gb = document.getElementById('ram4gbRadio');
+            const ram8gb = document.getElementById('ram8gbRadio');
+            const ram4gbDiv = document.getElementById('ram4gb');
+            const ram8gbDiv = document.getElementById('ram8gb');
+            
             const photoUpload = document.getElementById('photoUpload');
             const photoPreview = document.getElementById('photoPreview');
             const photoRequired = document.getElementById('photoRequired');
             const sumMig = document.getElementById('sumMig');
             const sumRev = document.getElementById('sumRev');
             const sumColl = document.getElementById('sumColl');
+            const sumRam = document.getElementById('sumRam');
             const sumUsb = document.getElementById('sumUsb');
             const sumGoogle = document.getElementById('sumGoogle');
             const totalSpan = document.getElementById('totalPrice');
@@ -743,6 +793,7 @@
             let reversibleSelected = false, reversiblePrice = 0, reversibleLabel = '';
             let collectionSelected = false, collectionPrice = 0, collectionLabel = '';
             let googleSelected = false, googleLabel = '';
+            let ramSelected = false, ramPrice = 0, ramLabel = '';
             let usbSelected = false, usbLabel = '';
             let photosUploaded = false, photoCount = 0;
 
@@ -836,6 +887,27 @@
                     sumColl.classList.add('placeholder-text');
                 }
 
+                // RAM Upgrade
+                if (ram4gb && ram4gb.checked) {
+                    ramSelected = true;
+                    ramPrice = 30;
+                    ramLabel = '4GB RAM (+£30)';
+                    sumRam.innerText = '+£30';
+                    sumRam.classList.remove('placeholder-text');
+                } else if (ram8gb && ram8gb.checked) {
+                    ramSelected = true;
+                    ramPrice = 50;
+                    ramLabel = '8GB RAM (+£50)';
+                    sumRam.innerText = '+£50';
+                    sumRam.classList.remove('placeholder-text');
+                } else {
+                    ramSelected = false;
+                    ramPrice = 0;
+                    ramLabel = '';
+                    sumRam.innerText = '-';
+                    sumRam.classList.add('placeholder-text');
+                }
+
                 // USB
                 if (migYes.checked) {
                     if (usbYes && usbYes.checked) {
@@ -879,7 +951,7 @@
                 if (migYes.checked) allSelected = allSelected && usbSelected;
                 
                 if (allSelected) {
-                    const total = migrationPrice + reversiblePrice + collectionPrice;
+                    const total = migrationPrice + reversiblePrice + collectionPrice + ramPrice;
                     totalSpan.innerText = `£${total}`;
                 } else {
                     totalSpan.innerText = '—';
@@ -897,6 +969,8 @@
                 else if (googleNo.checked) googleNoDiv.classList.add('selected');
                 if (usbYes && usbYes.checked) usbYesDiv.classList.add('selected');
                 else if (usbNo && usbNo.checked) usbNoDiv.classList.add('selected');
+                if (ram4gb && ram4gb.checked) ram4gbDiv.classList.add('selected');
+                else if (ram8gb && ram8gb.checked) ram8gbDiv.classList.add('selected');
 
                 checkAllConditions();
             }
@@ -923,12 +997,12 @@
             });
 
             // Event listeners
-            [migNo, migYes, revNo, revYes, collNo, collYes, googleYes, googleNo, usbYes, usbNo].forEach(el => {
+            [migNo, migYes, revNo, revYes, collNo, collYes, googleYes, googleNo, usbYes, usbNo, ram4gb, ram8gb].forEach(el => {
                 if (el) el.addEventListener('change', updateSummaryAndUI);
             });
 
             // Click handlers
-            [radioNoDiv, radioYesDiv, revNoDiv, revYesDiv, collNoDiv, collYesDiv, googleYesDiv, googleNoDiv, usbYesDiv, usbNoDiv].forEach(div => {
+            [radioNoDiv, radioYesDiv, revNoDiv, revYesDiv, collNoDiv, collYesDiv, googleYesDiv, googleNoDiv, usbYesDiv, usbNoDiv, ram4gbDiv, ram8gbDiv].forEach(div => {
                 if (div) {
                     div.addEventListener('click', function(e) {
                         if (!e.target.matches('input, label, span')) {
@@ -961,7 +1035,7 @@
                 }
 
                 statusDiv.innerText = '⏳ Sending...';
-                const total = migrationPrice + reversiblePrice + collectionPrice;
+                const total = migrationPrice + reversiblePrice + collectionPrice + ramPrice;
 
                 emailjs.send('service_lxc7ozk', 'template_i4u1bys', {
                     to_email: 'nevillebryce@gmail.com',
@@ -969,6 +1043,7 @@
                     migration: migrationLabel,
                     reversible: reversibleLabel,
                     collection: collectionLabel,
+                    ram_upgrade: ramLabel || 'None',
                     google_account: googleLabel,
                     usb_storage: usbLabel || 'n/a',
                     total: total,
