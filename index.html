@@ -144,7 +144,8 @@
         /* eligibility section - more compact */
         .eligibility-section,
         .prerequisites-section,
-        .options-section {
+        .options-section,
+        .additional-options-section {
             background: #ffffff;
             border-radius: 24px;
             padding: 18px 16px;
@@ -155,14 +156,16 @@
         @media (min-width: 768px) {
             .eligibility-section,
             .prerequisites-section,
-            .options-section {
+            .options-section,
+            .additional-options-section {
                 padding: 24px 22px;
                 margin: 24px 0 20px 0;
             }
         }
 
         .eligibility-title,
-        .options-title {
+        .options-title,
+        .additional-options-title {
             font-size: 1.3rem;
             font-weight: 700;
             margin-bottom: 16px;
@@ -295,13 +298,9 @@
             color: #1c1c1e;
         }
 
-        /* photo upload */
+        /* photo upload - simplified */
         .photo-section {
-            background: #f8f8fa;
-            border-radius: 24px;
-            padding: 18px 16px;
             margin: 24px 0 20px 0;
-            border: 2px dashed #007aff;
             text-align: center;
         }
         .photo-section p {
@@ -312,15 +311,27 @@
             line-height: 1.4;
         }
         .photo-label {
-            background: white;
-            border: 1.5px solid #007aff;
+            background: #007aff;
+            border: none;
             border-radius: 40px;
-            padding: 10px 18px;
+            padding: 12px 24px;
             font-weight: 600;
-            font-size: 0.95rem;
-            color: #007aff;
+            font-size: 1rem;
+            color: white;
             cursor: pointer;
             display: inline-block;
+            box-shadow: 0 4px 10px rgba(0,122,255,0.3);
+        }
+        .photo-label:hover {
+            background: #005bbf;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .photo-preview {
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: #28a745;
         }
 
         /* summary panel */
@@ -340,13 +351,13 @@
         }
         .total-row {
             font-weight: 700;
-            font-size: 1.8rem;
+            font-size: 2rem;
             color: #007aff;
             text-align: right;
             margin-top: 12px;
         }
         @media (min-width: 768px) {
-            .total-row { font-size: 2.2rem; }
+            .total-row { font-size: 2.4rem; }
         }
 
         /* email form */
@@ -396,6 +407,20 @@
             font-weight: 500;
             font-size: 0.9rem;
         }
+        .base-price {
+            background: #e9f0fe;
+            border-radius: 20px;
+            padding: 12px 16px;
+            margin: 8px 0 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        .base-price span:last-child {
+            color: #007aff;
+            font-size: 1.3rem;
+        }
     </style>
 </head>
 <body>
@@ -417,6 +442,12 @@
         <div class="consult-banner">
             <span>📅 Free 10 min consultation</span>
             <div class="phone-badge clickable-phone" onclick="window.location.href='tel:07809590652'">07809590652</div>
+        </div>
+
+        <!-- Base Migration Price Display -->
+        <div class="base-price">
+            <span>Base Migration:</span>
+            <span>£70</span>
         </div>
 
         <!-- Is this migration right for you? Section -->
@@ -460,9 +491,9 @@
                 </div>
                 <div class="eligibility-radio-card" id="ramNo">
                     <input type="radio" name="ramKnowledge" id="ramUnknown" value="no">
-                    <label for="ramUnknown">No - will provide a photo of the model number</label>
+                    <label for="ramUnknown">No I dont know how much RAM is inside, but I will provide a photo of the model number for further analysis.</label>
                 </div>
-                <!-- NEW: RAM Upgrade Option -->
+                <!-- RAM Upgrade Option -->
                 <div class="eligibility-radio-card" id="ramUpgrade">
                     <input type="radio" name="ramKnowledge" id="ramUpgradeRadio" value="upgrade">
                     <label for="ramUpgradeRadio">I want to upgrade the RAM</label>
@@ -477,12 +508,12 @@
                     <div class="eligibility-radio-card" id="ram4gb">
                         <input type="radio" name="ramUpgrade" id="ram4gbRadio" value="4gb">
                         <label for="ram4gbRadio">4GB RAM upgrade</label>
-                        <span class="price-chip">£30</span>
+                        <span class="price-chip">+£30</span>
                     </div>
                     <div class="eligibility-radio-card" id="ram8gb">
                         <input type="radio" name="ramUpgrade" id="ram8gbRadio" value="8gb">
                         <label for="ram8gbRadio">8GB RAM upgrade</label>
-                        <span class="price-chip">£50</span>
+                        <span class="price-chip">+£50</span>
                     </div>
                 </div>
             </div>
@@ -557,40 +588,34 @@
             });
         </script>
 
-        <!-- explanatory section -->
-        <div class="info-message">
-            <p>💡 <strong>Basic migration: £70</strong> — ChromeOS Flex installation.</p>
-            <p>Add options below for data care.</p>
-        </div>
-
-        <!-- OPTIONS SECTION -->
+        <!-- OPTIONS SECTION - Data Migration -->
         <div class="options-section">
-            <div class="options-title">Additional data care options</div>
+            <div class="options-title">Data Migration Options</div>
             
             <!-- OPTION 1 -->
             <div class="section-label">
                 Option 1 <small>data migration</small>
             </div>
             <div class="question-text">
-                Need help transferring data?
+                Do you need help transferring data?
             </div>
 
             <div class="radio-grid" id="migrationGroup">
                 <div class="radio-card" id="radioNo">
                     <input type="radio" name="migration" id="migNo" value="no">
-                    <label for="migNo">No - backed up myself, aware data will be wiped</label>
-                    <span class="price-chip">£70</span>
+                    <label for="migNo">No - backed up myself, aware data will be wiped (+£0)</label>
+                    <span class="price-chip">+£0</span>
                 </div>
                 <div class="radio-card" id="radioYes">
                     <input type="radio" name="migration" id="migYes" value="yes">
-                    <label for="migYes">Yes - need consultation on what to migrate</label>
-                    <span class="price-chip">£70+£30</span>
+                    <label for="migYes">Yes - I am unsure of the locations of all the required data and I require consultation on this matter (+£30 / 30mins)</label>
+                    <span class="price-chip">+£30</span>
                 </div>
             </div>
 
-            <!-- USB question -->
+            <!-- USB question - UPDATED -->
             <div id="usbQuestion" class="conditional-section" style="display: none;">
-                <div class="conditional-title">💾 Have a USB drive for data backup?</div>
+                <div class="conditional-title">💾 Do you have a USB drive for data backup?</div>
                 <div class="eligibility-radio-group" id="usbGroup">
                     <div class="eligibility-radio-card" id="usbYes">
                         <input type="radio" name="usbStorage" id="usbYesRadio" value="yes">
@@ -598,13 +623,32 @@
                     </div>
                     <div class="eligibility-radio-card" id="usbNo">
                         <input type="radio" name="usbStorage" id="usbNoRadio" value="no">
-                        <label for="usbNoRadio">No - will buy one</label>
+                        <label for="usbNoRadio">No - I wish to purchase one.</label>
                     </div>
                 </div>
             </div>
 
-            <!-- OPTION 2 -->
-            <div class="section-label" style="margin-top: 16px;">
+            <!-- USB Purchase Options (conditional) -->
+            <div id="usbPurchaseOptions" class="conditional-section" style="display: none;">
+                <div class="conditional-title">💿 Select USB drive size</div>
+                <div class="eligibility-radio-group" id="usbPurchaseGroup">
+                    <div class="eligibility-radio-card" id="usb128gb">
+                        <input type="radio" name="usbPurchase" id="usb128gbRadio" value="128gb">
+                        <label for="usb128gbRadio">128GB USB drive</label>
+                        <span class="price-chip">+£20</span>
+                    </div>
+                    <div class="eligibility-radio-card" id="usb256gb">
+                        <input type="radio" name="usbPurchase" id="usb256gbRadio" value="256gb">
+                        <label for="usb256gbRadio">256GB USB drive</label>
+                        <span class="price-chip">+£40</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPTION 2 - Reversible Clone (still in options section) -->
+        <div class="options-section">
+            <div class="section-label" style="margin-top: 0;">
                 Option 2 <small>reversible clone</small>
             </div>
             <div class="question-text">
@@ -614,13 +658,13 @@
             <div class="radio-grid" id="reversibleGroup">
                 <div class="radio-card" id="reversibleNo">
                     <input type="radio" name="reversible" id="revNo" value="no">
-                    <label for="revNo">No - happy with permanent change</label>
-                    <span class="price-chip">£0</span>
+                    <label for="revNo">No - happy with permanent change (+£0)</label>
+                    <span class="price-chip">+£0</span>
                 </div>
                 <div class="radio-card" id="reversibleYes">
                     <input type="radio" name="reversible" id="revYes" value="yes">
                     <label for="revYes">Yes - want exact clone to revert if needed</label>
-                    <span class="price-chip">Clone (+£100)</span>
+                    <span class="price-chip">+£100</span>
                 </div>
             </div>
 
@@ -629,9 +673,14 @@
                 <div class="conditional-title">🔄 Clone details</div>
                 <p style="font-size: 0.9rem;">Full system clone on provided USB. Not user-accessible - for reversion only. Select Option 1 if you need file access.</p>
             </div>
+        </div>
 
-            <!-- OPTION 3 -->
-            <div class="section-label" style="margin-top: 16px;">
+        <!-- ADDITIONAL OPTIONS SECTION - Collection moved here -->
+        <div class="additional-options-section">
+            <div class="additional-options-title">Additional Options</div>
+            
+            <!-- Collection Option -->
+            <div class="section-label" style="margin-top: 0;">
                 Option 3 <small>collection</small>
             </div>
             <div class="question-text">
@@ -641,8 +690,8 @@
             <div class="radio-grid" id="collectionGroup">
                 <div class="radio-card" id="collectionNo">
                     <input type="radio" name="collection" id="collNo" value="no">
-                    <label for="collNo">No - will deliver to NW11 7BY</label>
-                    <span class="price-chip">£0</span>
+                    <label for="collNo">No - will deliver to NW11 7BY (+£0)</label>
+                    <span class="price-chip">+£0</span>
                 </div>
                 <div class="radio-card" id="collectionYes">
                     <input type="radio" name="collection" id="collYes" value="yes">
@@ -662,11 +711,13 @@
             <div class="eligibility-radio-group" id="googleAccountGroup">
                 <div class="eligibility-radio-card" id="googleYes">
                     <input type="radio" name="googleAccount" id="googleYesRadio" value="yes">
-                    <label for="googleYesRadio">Yes - have one</label>
+                    <label for="googleYesRadio">Yes - have one (+£0)</label>
+                    <span class="price-chip">+£0</span>
                 </div>
                 <div class="eligibility-radio-card" id="googleNo">
                     <input type="radio" name="googleAccount" id="googleNoRadio" value="no">
-                    <label for="googleNoRadio">No - will set up</label>
+                    <label for="googleNoRadio">No - will set up (+£0)</label>
+                    <span class="price-chip">+£0</span>
                 </div>
             </div>
             <div id="googleFeedback" class="eligibility-feedback" style="display: none;"></div>
@@ -687,7 +738,7 @@
             });
         </script>
 
-        <!-- PHOTO UPLOAD -->
+        <!-- PHOTO UPLOAD - simplified -->
         <div class="photo-section">
             <p>📸 <strong>Upload photo</strong> of model sticker on computer</p>
             <p style="font-size: 0.85rem;">Detail important for identification</p>
@@ -696,18 +747,18 @@
             <input type="file" id="photoUpload" accept="image/*" multiple>
             
             <div id="photoPreview" class="photo-preview"></div>
-            <div id="photoRequired" class="photo-required-badge">⚠️ Photo required</div>
         </div>
 
         <!-- SUMMARY -->
         <div class="summary-panel" id="summary">
-            <div class="summary-row"><span>Data migration</span><span id="sumMig" class="placeholder-text">-</span></div>
-            <div class="summary-row"><span>Reversible clone</span><span id="sumRev" class="placeholder-text">-</span></div>
-            <div class="summary-row"><span>Collection</span><span id="sumColl" class="placeholder-text">-</span></div>
-            <div class="summary-row"><span>RAM upgrade</span><span id="sumRam" class="placeholder-text">-</span></div>
-            <div class="summary-row"><span>USB storage</span><span id="sumUsb" class="placeholder-text">-</span></div>
-            <div class="summary-row"><span>Google account</span><span id="sumGoogle" class="placeholder-text">-</span></div>
-            <div class="total-row" id="totalPrice">—</div>
+            <div class="summary-row"><span>Base Migration</span><span>£70</span></div>
+            <div class="summary-row"><span>Data migration</span><span id="sumMig" class="placeholder-text">+£0</span></div>
+            <div class="summary-row"><span>Reversible clone</span><span id="sumRev" class="placeholder-text">+£0</span></div>
+            <div class="summary-row"><span>Collection</span><span id="sumColl" class="placeholder-text">+£0</span></div>
+            <div class="summary-row"><span>RAM upgrade</span><span id="sumRam" class="placeholder-text">+£0</span></div>
+            <div class="summary-row"><span>USB storage</span><span id="sumUsb" class="placeholder-text">+£0</span></div>
+            <div class="summary-row"><span>Google account</span><span id="sumGoogle" class="placeholder-text">+£0</span></div>
+            <div class="total-row" id="totalPrice">£70</div>
         </div>
 
         <!-- DISCLAIMER -->
@@ -755,11 +806,19 @@
             const googleNo = document.getElementById('googleNoRadio');
             const googleYesDiv = document.getElementById('googleYes');
             const googleNoDiv = document.getElementById('googleNo');
+            
+            // USB elements
             const usbYes = document.getElementById('usbYesRadio');
             const usbNo = document.getElementById('usbNoRadio');
             const usbYesDiv = document.getElementById('usbYes');
             const usbNoDiv = document.getElementById('usbNo');
             const usbQuestion = document.getElementById('usbQuestion');
+            const usbPurchaseOptions = document.getElementById('usbPurchaseOptions');
+            const usb128gb = document.getElementById('usb128gbRadio');
+            const usb256gb = document.getElementById('usb256gbRadio');
+            const usb128gbDiv = document.getElementById('usb128gb');
+            const usb256gbDiv = document.getElementById('usb256gb');
+            
             const cloneFeedback = document.getElementById('cloneFeedback');
             
             // RAM upgrade elements
@@ -770,7 +829,6 @@
             
             const photoUpload = document.getElementById('photoUpload');
             const photoPreview = document.getElementById('photoPreview');
-            const photoRequired = document.getElementById('photoRequired');
             const sumMig = document.getElementById('sumMig');
             const sumRev = document.getElementById('sumRev');
             const sumColl = document.getElementById('sumColl');
@@ -784,30 +842,63 @@
             const emailInput = document.getElementById('customerEmail');
             const statusDiv = document.getElementById('emailStatus');
 
+            const BASE_PRICE = 70;
+
             function getCurrentDate() {
                 const date = new Date();
                 return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
             }
 
-            let migrationSelected = false, migrationPrice = 0, migrationLabel = '';
-            let reversibleSelected = false, reversiblePrice = 0, reversibleLabel = '';
-            let collectionSelected = false, collectionPrice = 0, collectionLabel = '';
-            let googleSelected = false, googleLabel = '';
-            let ramSelected = false, ramPrice = 0, ramLabel = '';
-            let usbSelected = false, usbLabel = '';
-            let photosUploaded = false, photoCount = 0;
+            let migrationSelected = false;
+            let migrationExtra = 0;
+            let migrationLabel = 'None';
+            
+            let reversibleSelected = false;
+            let reversibleExtra = 0;
+            let reversibleLabel = 'None';
+            
+            let collectionSelected = false;
+            let collectionExtra = 0;
+            let collectionLabel = 'None';
+
+            let googleSelected = false;
+            let googleLabel = 'None';
+            
+            let ramSelected = false;
+            let ramExtra = 0;
+            let ramLabel = 'None';
+            
+            let usbSelected = false;
+            let usbExtra = 0;
+            let usbLabel = 'None';
+            
+            let photosUploaded = false;
+            let photoCount = 0;
 
             function toggleUsbQuestion() {
                 if (migYes.checked) {
                     usbQuestion.style.display = 'block';
                 } else {
                     usbQuestion.style.display = 'none';
+                    usbPurchaseOptions.style.display = 'none';
                     if (usbYes) usbYes.checked = false;
                     if (usbNo) usbNo.checked = false;
+                    if (usb128gb) usb128gb.checked = false;
+                    if (usb256gb) usb256gb.checked = false;
                     usbSelected = false;
-                    usbLabel = '';
-                    sumUsb.innerText = '-';
-                    sumUsb.classList.add('placeholder-text');
+                    usbExtra = 0;
+                    usbLabel = 'None';
+                    sumUsb.innerText = '+£0';
+                }
+            }
+
+            function toggleUsbPurchase() {
+                if (usbNo && usbNo.checked) {
+                    usbPurchaseOptions.style.display = 'block';
+                } else {
+                    usbPurchaseOptions.style.display = 'none';
+                    if (usb128gb) usb128gb.checked = false;
+                    if (usb256gb) usb256gb.checked = false;
                 }
                 updateSummaryAndUI();
             }
@@ -817,6 +908,11 @@
             }
 
             migYes.addEventListener('change', toggleUsbQuestion);
+            migNo.addEventListener('change', toggleUsbQuestion);
+            
+            if (usbNo) usbNo.addEventListener('change', toggleUsbPurchase);
+            if (usbYes) usbYes.addEventListener('change', toggleUsbPurchase);
+            
             revYes.addEventListener('change', toggleCloneFeedback);
             revNo.addEventListener('change', toggleCloneFeedback);
 
@@ -824,160 +920,163 @@
                 // Migration
                 if (migYes.checked) {
                     migrationSelected = true;
-                    migrationPrice = 100;
-                    migrationLabel = 'Data consultation (£70+£30)';
-                    sumMig.innerText = '£70+£30';
-                    sumMig.classList.remove('placeholder-text');
+                    migrationExtra = 30;
+                    migrationLabel = 'Data consultation (+£30)';
+                    sumMig.innerText = '+£30';
                 } else if (migNo.checked) {
                     migrationSelected = true;
-                    migrationPrice = 70;
-                    migrationLabel = 'Self backup (£70)';
-                    sumMig.innerText = '£70';
-                    sumMig.classList.remove('placeholder-text');
+                    migrationExtra = 0;
+                    migrationLabel = 'Self backup (+£0)';
+                    sumMig.innerText = '+£0';
                 } else {
                     migrationSelected = false;
-                    migrationPrice = 0;
-                    migrationLabel = '';
-                    sumMig.innerText = '-';
-                    sumMig.classList.add('placeholder-text');
+                    migrationExtra = 0;
+                    migrationLabel = 'None';
+                    sumMig.innerText = '+£0';
                 }
 
                 // Reversible
                 if (revYes.checked) {
                     reversibleSelected = true;
-                    reversiblePrice = 100;
+                    reversibleExtra = 100;
                     reversibleLabel = 'Clone (+£100)';
                     sumRev.innerText = '+£100';
-                    sumRev.classList.remove('placeholder-text');
                     toggleCloneFeedback();
                 } else if (revNo.checked) {
                     reversibleSelected = true;
-                    reversiblePrice = 0;
-                    reversibleLabel = 'Not added';
-                    sumRev.innerText = 'not added';
-                    sumRev.classList.remove('placeholder-text');
+                    reversibleExtra = 0;
+                    reversibleLabel = 'Not added (+£0)';
+                    sumRev.innerText = '+£0';
                     toggleCloneFeedback();
                 } else {
                     reversibleSelected = false;
-                    reversiblePrice = 0;
-                    reversibleLabel = '';
-                    sumRev.innerText = '-';
-                    sumRev.classList.add('placeholder-text');
+                    reversibleExtra = 0;
+                    reversibleLabel = 'None';
+                    sumRev.innerText = '+£0';
                     cloneFeedback.style.display = 'none';
                 }
 
                 // Collection
                 if (collYes.checked) {
                     collectionSelected = true;
-                    collectionPrice = 10;
+                    collectionExtra = 10;
                     collectionLabel = 'Collection (+£10)';
                     sumColl.innerText = '+£10';
-                    sumColl.classList.remove('placeholder-text');
                 } else if (collNo.checked) {
                     collectionSelected = true;
-                    collectionPrice = 0;
-                    collectionLabel = 'Self delivery';
-                    sumColl.innerText = 'self';
-                    sumColl.classList.remove('placeholder-text');
+                    collectionExtra = 0;
+                    collectionLabel = 'Self delivery (+£0)';
+                    sumColl.innerText = '+£0';
                 } else {
                     collectionSelected = false;
-                    collectionPrice = 0;
-                    collectionLabel = '';
-                    sumColl.innerText = '-';
-                    sumColl.classList.add('placeholder-text');
+                    collectionExtra = 0;
+                    collectionLabel = 'None';
+                    sumColl.innerText = '+£0';
                 }
 
                 // RAM Upgrade
                 if (ram4gb && ram4gb.checked) {
                     ramSelected = true;
-                    ramPrice = 30;
+                    ramExtra = 30;
                     ramLabel = '4GB RAM (+£30)';
                     sumRam.innerText = '+£30';
-                    sumRam.classList.remove('placeholder-text');
                 } else if (ram8gb && ram8gb.checked) {
                     ramSelected = true;
-                    ramPrice = 50;
+                    ramExtra = 50;
                     ramLabel = '8GB RAM (+£50)';
                     sumRam.innerText = '+£50';
-                    sumRam.classList.remove('placeholder-text');
                 } else {
                     ramSelected = false;
-                    ramPrice = 0;
-                    ramLabel = '';
-                    sumRam.innerText = '-';
-                    sumRam.classList.add('placeholder-text');
+                    ramExtra = 0;
+                    ramLabel = 'None';
+                    sumRam.innerText = '+£0';
                 }
 
                 // USB
                 if (migYes.checked) {
-                    if (usbYes && usbYes.checked) {
+                    if (usb128gb && usb128gb.checked) {
                         usbSelected = true;
-                        usbLabel = 'Has USB';
-                        sumUsb.innerText = 'has';
-                        sumUsb.classList.remove('placeholder-text');
+                        usbExtra = 20;
+                        usbLabel = '128GB USB (+£20)';
+                        sumUsb.innerText = '+£20';
+                    } else if (usb256gb && usb256gb.checked) {
+                        usbSelected = true;
+                        usbExtra = 40;
+                        usbLabel = '256GB USB (+£40)';
+                        sumUsb.innerText = '+£40';
+                    } else if (usbYes && usbYes.checked) {
+                        usbSelected = true;
+                        usbExtra = 0;
+                        usbLabel = 'Has USB (+£0)';
+                        sumUsb.innerText = '+£0';
                     } else if (usbNo && usbNo.checked) {
-                        usbSelected = true;
-                        usbLabel = 'Will buy USB';
-                        sumUsb.innerText = 'will buy';
-                        sumUsb.classList.remove('placeholder-text');
+                        usbSelected = false; // Not fully selected until they choose size
+                        usbExtra = 0;
+                        usbLabel = '';
+                        sumUsb.innerText = '+£0';
                     } else {
                         usbSelected = false;
+                        usbExtra = 0;
                         usbLabel = '';
-                        sumUsb.innerText = '-';
-                        sumUsb.classList.add('placeholder-text');
+                        sumUsb.innerText = '+£0';
                     }
+                } else {
+                    sumUsb.innerText = '+£0';
                 }
 
                 // Google
-                if (googleYes.checked) {
+                if (googleYes.checked || googleNo.checked) {
                     googleSelected = true;
-                    googleLabel = 'Has account';
-                    sumGoogle.innerText = 'yes';
-                    sumGoogle.classList.remove('placeholder-text');
-                } else if (googleNo.checked) {
-                    googleSelected = true;
-                    googleLabel = 'Will set up';
-                    sumGoogle.innerText = 'will set up';
-                    sumGoogle.classList.remove('placeholder-text');
+                    googleLabel = googleYes.checked ? 'Has account' : 'Will set up';
+                    sumGoogle.innerText = '+£0';
                 } else {
                     googleSelected = false;
-                    googleLabel = '';
-                    sumGoogle.innerText = '-';
-                    sumGoogle.classList.add('placeholder-text');
+                    googleLabel = 'None';
+                    sumGoogle.innerText = '+£0';
                 }
 
-                // Total
-                let allSelected = migrationSelected && reversibleSelected && collectionSelected && googleSelected;
-                if (migYes.checked) allSelected = allSelected && usbSelected;
-                
-                if (allSelected) {
-                    const total = migrationPrice + reversiblePrice + collectionPrice + ramPrice;
-                    totalSpan.innerText = `£${total}`;
-                } else {
-                    totalSpan.innerText = '—';
-                }
+                // Calculate total
+                const total = BASE_PRICE + migrationExtra + reversibleExtra + collectionExtra + ramExtra + usbExtra;
+                totalSpan.innerText = `£${total}`;
 
                 // Highlights
                 document.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
                 if (migYes.checked) radioYesDiv.classList.add('selected');
                 else if (migNo.checked) radioNoDiv.classList.add('selected');
+                
                 if (revYes.checked) revYesDiv.classList.add('selected');
                 else if (revNo.checked) revNoDiv.classList.add('selected');
+                
                 if (collYes.checked) collYesDiv.classList.add('selected');
                 else if (collNo.checked) collNoDiv.classList.add('selected');
+                
                 if (googleYes.checked) googleYesDiv.classList.add('selected');
                 else if (googleNo.checked) googleNoDiv.classList.add('selected');
-                if (usbYes && usbYes.checked) usbYesDiv.classList.add('selected');
-                else if (usbNo && usbNo.checked) usbNoDiv.classList.add('selected');
+                
                 if (ram4gb && ram4gb.checked) ram4gbDiv.classList.add('selected');
                 else if (ram8gb && ram8gb.checked) ram8gbDiv.classList.add('selected');
+                
+                if (usb128gb && usb128gb.checked) usb128gbDiv.classList.add('selected');
+                else if (usb256gb && usb256gb.checked) usb256gbDiv.classList.add('selected');
+                else if (usbYes && usbYes.checked) usbYesDiv.classList.add('selected');
+                else if (usbNo && usbNo.checked) usbNoDiv.classList.add('selected');
 
                 checkAllConditions();
             }
 
             function checkAllConditions() {
-                let allSelected = migrationSelected && reversibleSelected && collectionSelected && googleSelected;
-                if (migYes.checked) allSelected = allSelected && usbSelected;
+                // Conditions: all sections have a selection AND at least one photo uploaded
+                let usbCondition = true;
+                if (migYes.checked) {
+                    // If they chose "No - I wish to purchase one", they need to select a size
+                    if (usbNo && usbNo.checked) {
+                        usbCondition = (usb128gb && usb128gb.checked) || (usb256gb && usb256gb.checked);
+                    } else {
+                        usbCondition = (usbYes && usbYes.checked) || (usbNo && usbNo.checked);
+                    }
+                }
+                
+                const allSelected = migrationSelected && reversibleSelected && collectionSelected && googleSelected && usbCondition;
                 
                 if (allSelected && photosUploaded) {
                     emailSection.classList.remove('hidden');
@@ -991,18 +1090,23 @@
             photoUpload.addEventListener('change', function(e) {
                 photoCount = e.target.files.length;
                 photosUploaded = photoCount > 0;
-                photoPreview.innerHTML = photosUploaded ? `✅ ${photoCount} photo(s)` : '';
-                photoRequired.style.opacity = photosUploaded ? '0.5' : '1';
+                photoPreview.innerHTML = photosUploaded ? `✅ ${photoCount} photo(s) selected` : '';
                 checkAllConditions();
             });
 
             // Event listeners
-            [migNo, migYes, revNo, revYes, collNo, collYes, googleYes, googleNo, usbYes, usbNo, ram4gb, ram8gb].forEach(el => {
+            [migNo, migYes, revNo, revYes, collNo, collYes, googleYes, googleNo, usbYes, usbNo, usb128gb, usb256gb, ram4gb, ram8gb].forEach(el => {
                 if (el) el.addEventListener('change', updateSummaryAndUI);
             });
 
-            // Click handlers
-            [radioNoDiv, radioYesDiv, revNoDiv, revYesDiv, collNoDiv, collYesDiv, googleYesDiv, googleNoDiv, usbYesDiv, usbNoDiv, ram4gbDiv, ram8gbDiv].forEach(div => {
+            // Click handlers for cards
+            const allDivs = [
+                radioNoDiv, radioYesDiv, revNoDiv, revYesDiv, collNoDiv, collYesDiv, 
+                googleYesDiv, googleNoDiv, usbYesDiv, usbNoDiv, usb128gbDiv, usb256gbDiv, 
+                ram4gbDiv, ram8gbDiv
+            ];
+            
+            allDivs.forEach(div => {
                 if (div) {
                     div.addEventListener('click', function(e) {
                         if (!e.target.matches('input, label, span')) {
@@ -1016,6 +1120,7 @@
                 }
             });
 
+            // Initial update
             updateSummaryAndUI();
 
             // Email send
@@ -1026,27 +1131,39 @@
                     return;
                 }
 
-                let allSelected = migrationSelected && reversibleSelected && collectionSelected && googleSelected;
-                if (migYes.checked) allSelected = allSelected && usbSelected;
+                let usbCondition = true;
+                if (migYes.checked) {
+                    if (usbNo && usbNo.checked) {
+                        usbCondition = (usb128gb && usb128gb.checked) || (usb256gb && usb256gb.checked);
+                    } else {
+                        usbCondition = (usbYes && usbYes.checked) || (usbNo && usbNo.checked);
+                    }
+                }
+                
+                const allSelected = migrationSelected && reversibleSelected && collectionSelected && googleSelected && usbCondition;
                 
                 if (!allSelected) {
                     statusDiv.innerText = '❌ Select all options';
+                    statusDiv.style.color = '#ff3b30';
                     return;
                 }
 
                 statusDiv.innerText = '⏳ Sending...';
-                const total = migrationPrice + reversiblePrice + collectionPrice + ramPrice;
+                statusDiv.style.color = '#3a3a3c';
+                
+                const total = BASE_PRICE + migrationExtra + reversibleExtra + collectionExtra + ramExtra + usbExtra;
 
                 emailjs.send('service_lxc7ozk', 'template_i4u1bys', {
                     to_email: 'nevillebryce@gmail.com',
                     customer_email: emailInput.value || 'not provided',
+                    base_price: `£${BASE_PRICE}`,
                     migration: migrationLabel,
                     reversible: reversibleLabel,
                     collection: collectionLabel,
-                    ram_upgrade: ramLabel || 'None',
+                    ram_upgrade: ramLabel,
+                    usb_storage: usbLabel,
                     google_account: googleLabel,
-                    usb_storage: usbLabel || 'n/a',
-                    total: total,
+                    total: `£${total}`,
                     photo_count: photoCount,
                     phone: '07809590652',
                     date: getCurrentDate()
@@ -1057,6 +1174,7 @@
                     setTimeout(() => sendBtn.disabled = false, 5000);
                 }).catch(error => {
                     statusDiv.innerText = `❌ Failed: ${error.text || 'Check template'}`;
+                    statusDiv.style.color = '#ff3b30';
                 });
             });
 
