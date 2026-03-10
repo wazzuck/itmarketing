@@ -790,7 +790,7 @@
             </div>
         </div>
 
-        <!-- CUSTOMER DETAILS SECTION -->
+        <!-- CUSTOMER DETAILS SECTION - UPDATED with telephone number -->
         <div class="customer-details-section">
             <div class="customer-details-title">👤 Your Details</div>
             
@@ -798,6 +798,10 @@
                 <div>
                     <div class="input-label">Your Name</div>
                     <input type="text" id="customerName" class="customer-input" placeholder="e.g. John Smith" value="">
+                </div>
+                <div>
+                    <div class="input-label">Your Telephone Number</div>
+                    <input type="tel" id="customerPhone" class="customer-input" placeholder="e.g. 07123 456789" value="">
                 </div>
                 <div>
                     <div class="input-label">Your Email (optional, for confirmation)</div>
@@ -839,6 +843,7 @@
                 <form id="quoteForm">
                     <!-- Hidden fields to store all the quote data -->
                     <input type="hidden" name="customer_name" id="form_customer_name">
+                    <input type="hidden" name="customer_phone" id="form_customer_phone">
                     <input type="hidden" name="customer_email" id="form_customer_email">
                     <input type="hidden" name="computer_description" id="form_computer_description">
                     <input type="hidden" name="base_price" value="£70">
@@ -849,7 +854,7 @@
                     <input type="hidden" name="usb_storage" id="form_usb">
                     <input type="hidden" name="google_account" id="form_google">
                     <input type="hidden" name="total" id="form_total">
-                    <input type="hidden" name="phone" value="07809590652">
+                    <input type="hidden" name="consultation_phone" value="07809590652">
                     <input type="hidden" name="date" id="form_date">
                     
                     <button class="send-btn" id="sendEmailBtn" type="button">✈️ Send quote</button>
@@ -905,8 +910,9 @@
             const ram4gbDiv = document.getElementById('ram4gb');
             const ram8gbDiv = document.getElementById('ram8gb');
             
-            // Customer details
+            // Customer details - UPDATED with phone
             const customerName = document.getElementById('customerName');
+            const customerPhone = document.getElementById('customerPhone');
             const customerEmail = document.getElementById('customerEmail');
             
             // Computer details
@@ -1024,6 +1030,7 @@
                 }
                 
                 const nameComplete = customerName.value.trim() !== '';
+                const phoneComplete = customerPhone.value.trim() !== '';
                 
                 // Build requirements list
                 let html = '';
@@ -1070,6 +1077,12 @@
                 html += `<div class="requirements-item ${nameComplete ? 'complete' : 'missing'}">
                     <span class="status-icon">${nameComplete ? '✅' : '⬜'}</span>
                     <span>Your name</span>
+                </div>`;
+                
+                // Phone section
+                html += `<div class="requirements-item ${phoneComplete ? 'complete' : 'missing'}">
+                    <span class="status-icon">${phoneComplete ? '✅' : '⬜'}</span>
+                    <span>Your telephone number</span>
                 </div>`;
                 
                 requirementsList.innerHTML = html;
@@ -1244,9 +1257,10 @@
                 }
                 
                 const nameComplete = customerName.value.trim() !== '';
+                const phoneComplete = customerPhone.value.trim() !== '';
                 const computerComplete = computerDescription.value.trim() !== '';
                 
-                const allSelected = migrationSelected && reversibleSelected && collectionSelected && googleSelected && usbCondition && nameComplete && computerComplete;
+                const allSelected = migrationSelected && reversibleSelected && collectionSelected && googleSelected && usbCondition && nameComplete && phoneComplete && computerComplete;
                 
                 if (allSelected) {
                     emailSection.classList.remove('hidden');
@@ -1258,6 +1272,11 @@
             }
 
             customerName.addEventListener('input', function() {
+                updateRequirementsDisplay();
+                checkAllConditions();
+            });
+
+            customerPhone.addEventListener('input', function() {
                 updateRequirementsDisplay();
                 checkAllConditions();
             });
@@ -1296,7 +1315,7 @@
             // Initial update
             updateSummaryAndUI();
 
-            // Email send - with computer description and no photo references
+            // Email send - with customer phone number
             sendBtn.addEventListener('click', function() {
                 let usbCondition = true;
                 if (migYes.checked) {
@@ -1308,9 +1327,10 @@
                 }
                 
                 const nameComplete = customerName.value.trim() !== '';
+                const phoneComplete = customerPhone.value.trim() !== '';
                 const computerComplete = computerDescription.value.trim() !== '';
                 
-                const allSelected = migrationSelected && reversibleSelected && collectionSelected && googleSelected && usbCondition && nameComplete && computerComplete;
+                const allSelected = migrationSelected && reversibleSelected && collectionSelected && googleSelected && usbCondition && nameComplete && phoneComplete && computerComplete;
                 
                 if (!allSelected) {
                     statusDiv.innerText = '❌ Please complete all required sections';
@@ -1326,6 +1346,7 @@
 
                 // Set all hidden form fields
                 document.getElementById('form_customer_name').value = customerName.value.trim() || 'Not provided';
+                document.getElementById('form_customer_phone').value = customerPhone.value.trim() || 'Not provided';
                 document.getElementById('form_customer_email').value = customerEmail.value.trim() || 'Not provided';
                 document.getElementById('form_computer_description').value = computerDescription.value.trim() || 'Not provided';
                 document.getElementById('form_migration').value = migrationLabel;
@@ -1340,6 +1361,7 @@
                 // Common template parameters for both emails
                 const templateParams = {
                     customer_name: customerName.value.trim() || 'Not provided',
+                    customer_phone: customerPhone.value.trim() || 'Not provided',
                     customer_email: customerEmail.value.trim() || 'Not provided',
                     computer_description: computerDescription.value.trim() || 'Not provided',
                     base_price: `£${BASE_PRICE}`,
@@ -1350,7 +1372,7 @@
                     usb_storage: usbLabel,
                     google_account: googleLabel,
                     total: `£${total}`,
-                    phone: '07809590652',
+                    consultation_phone: '07809590652',
                     date: currentDate
                 };
 
