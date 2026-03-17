@@ -21,6 +21,15 @@ header {
     color: #0071e3;
     text-decoration: none;
     transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo img {
+    height: 32px;
+    width: auto;
+    display: inline-block;
 }
 
 .logo:hover {
