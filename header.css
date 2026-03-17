@@ -23,13 +23,13 @@ header {
     transition: transform 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 8px;
 }
 
 .logo img {
     height: 32px;
     width: auto;
     display: inline-block;
+    margin-right: 8px;
 }
 
 .logo:hover {
