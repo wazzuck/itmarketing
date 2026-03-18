@@ -108,28 +108,4 @@ header {
     .consultation-text {
         font-size: 0.7rem;
     }
-
-    body {
-        padding-top: 75px;
-    }
-}
-
-/* Extra safety for very small phones where header may wrap */
-@media (max-width: 380px) {
-    header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-    }
-
-    .phone-info {
-        align-items: flex-start;
-        flex-direction: row;
-        gap: 8px;
-        flex-wrap: wrap;
-    }
-
-    body {
-        padding-top: 110px;
-    }
 }
