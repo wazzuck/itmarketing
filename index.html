@@ -24,48 +24,30 @@
             padding-top: 110px;
         }
 
-        .intro-section {
+        .chat-frame-wrap {
             max-width: 800px;
             margin: 0 auto 48px auto;
-            background: #FFFBF3;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
-            padding: 48px 40px;
             animation: fadeIn 0.6s ease-in;
-            text-align: center;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
         }
 
-        .intro-section h1 {
-            font-size: 2.2rem;
-            color: #1d1d1d;
-            margin-bottom: 32px;
-            font-weight: 700;
+        .chat-frame-wrap iframe {
+            display: block;
+            width: 100%;
+            height: 560px;
+            border: none;
         }
 
-        .poem {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #424245;
-            margin-bottom: 36px;
-            font-style: italic;
-            letter-spacing: 0.3px;
-        }
-
-        .poem p {
-            margin-bottom: 16px;
-        }
-
-        .divider {
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #f7b318, transparent);
-            margin: 32px auto;
-        }
-
-        .services-intro {
-            font-size: 1rem;
-            color: #666666;
-            line-height: 1.6;
+        @media (max-width: 768px) {
+            .chat-frame-wrap {
+                border-radius: 16px;
+                margin-bottom: 32px;
+            }
+            .chat-frame-wrap iframe {
+                height: 460px;
+            }
         }
 
         @keyframes fadeIn {
@@ -175,15 +157,6 @@
                 font-size: 0.75rem;
             }
 
-            .intro-section {
-                padding: 32px 20px;
-                border-radius: 16px;
-                margin-bottom: 32px;
-            }
-
-            .intro-section h1 {
-                font-size: 1.8rem;
-            }
 
             .services-grid {
                 grid-template-columns: 1fr 1fr !important;
@@ -215,14 +188,6 @@
                 width: 40px !important;
                 height: 40px !important;
             }
-
-            .poem {
-                font-size: 1rem;
-            }
-
-            .services-intro {
-                font-size: 0.95rem;
-            }
         }
 
         @media (max-width: 360px) {
@@ -243,26 +208,12 @@
         </div>
     </header>
 
-    <div class="intro-section">
-        <h1>Welcome</h1>
-        
-        <div class="poem">
-            <p>Systems migrate, one byte at a time,</p>
-            <p>From old to new, in perfect rhyme.</p>
-            <p>Your time is precious, not to waste,</p>
-            <p>We work with purpose, act with haste.</p>
-            <p>Solutions fast, efficient, and clear,</p>
-            <p>Technology expertise without the fear.</p>
-            <br>
-            <p>Proudly local, with roots well grown,</p>
-            <p>Serving North West London, your trusted zone.</p>
-        </div>
-
-        <div class="divider"></div>
-
-        <p class="services-intro">
-            Professional technology solutions tailored to your needs.
-        </p>
+    <div class="chat-frame-wrap">
+        <iframe
+            src="https://www.chatbase.co/chatbot-iframe/0bcLr7pcOs9kBCHuQuIWD"
+            title="Chat with IToldYouSo Computing"
+            allow="microphone"
+        ></iframe>
     </div>
 
     <div id="services" class="services-grid">
