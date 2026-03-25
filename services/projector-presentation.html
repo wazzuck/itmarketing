@@ -15,7 +15,7 @@
 
         document.addEventListener("DOMContentLoaded", function() {
             const logo = document.querySelector(".logo");
-            if (logo) logo.textContent = "🖥️ " + COMPANY_NAME;
+            if (logo) logo.innerHTML = '<img src="/assets/glasses.png" alt="IToldYouSo" /> <span><i>IT</i>oldYouSo Computing</span>';
 
             const footer = document.querySelector("footer");
             if (footer) footer.innerHTML = footer.innerHTML.replace(/Neville's Tech Services/g, COMPANY_NAME);
@@ -32,7 +32,7 @@
     </script>
 
     <header>
-        <a href="../index.html" class="logo">🖥️ IToldYouSo Computing</a>
+        <a href="../index.html" class="logo"><img src="/assets/glasses.png" alt="IToldYouSo" /> <span><i>IT</i>oldYouSo Computing</span></a>
         <div class="phone-info">
             <a href="tel:07809590652" class="phone-number">07809590652</a>
             <a href="mailto:contactus@itoldyouso.tech" class="email-address">contactus@itoldyouso.tech</a>
