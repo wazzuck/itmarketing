@@ -6,39 +6,11 @@
     <title>AI Tools Setup & Training - IToldYouSo Computing</title>
     <link rel="stylesheet" href="../header.css">
     <link rel="stylesheet" href="styles.css">
+    <script src="../header-loader.js" defer></script>
+    <script src="../header.js" defer></script>
 </head>
 <body>
-    <script>
-        const COMPANY_NAME = "IToldYouSo Computing";
-        const PHONE_NUMBER = "07809590652";
-        const EMAIL_ADDRESS = "contactus@itoldyouso.tech";
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const logo = document.querySelector(".logo");
-            if (logo) logo.innerHTML = '<img src="/assets/glasses.png" alt="IToldYouSo" /> <span><i>IT</i>oldYouSo Computing</span>';
-
-            const footer = document.querySelector("footer");
-            if (footer) footer.innerHTML = footer.innerHTML.replace(/Neville's Tech Services/g, COMPANY_NAME);
-
-            document.title = document.title.replace(/Neville's Tech Services/g, COMPANY_NAME);
-
-            const navButtons = document.querySelector(".nav-buttons");
-            if (navButtons) {
-                navButtons.innerHTML = '<a href="tel:' + PHONE_NUMBER + '" class="nav-btn">' + PHONE_NUMBER + '</a>' +
-                                       '<a href="mailto:' + EMAIL_ADDRESS + '" class="nav-btn" style="font-size: 0.85rem;">' + EMAIL_ADDRESS + '</a>' +
-                                       '<div style="padding: 8px 16px; font-size: 0.8rem; color: #666; font-style: italic; line-height: 1.4;">Free 15 minute<br>consultation</div>';
-            }
-        });
-    </script>
-
-    <header>
-        <a href="../index.html" class="logo"><img src="/assets/glasses.png" alt="IToldYouSo" /> <span><i>IT</i>oldYouSo Computing</span></a>
-        <div class="phone-info">
-            <a href="tel:07809590652" class="phone-number">07809590652</a>
-            <a href="mailto:contactus@itoldyouso.tech" class="email-address">contactus@itoldyouso.tech</a>
-            <p class="consultation-text">Free 15 minute consultation</p>
-        </div>
-    </header>
+    <header></header>
 
     <div class="service-container">
         <div class="breadcrumb">
