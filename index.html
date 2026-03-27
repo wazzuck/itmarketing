@@ -765,6 +765,19 @@
         © <i>IT</i>oldYouSo Computing | Professional Technology Solutions
     </footer>
 
+    <!-- Chatbase bubble widget -->
+    <script>
+      (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="0bcLr7pcOs9kBCHuQuIWD";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+      
+      // Configure Chatbase for fullscreen on desktop
+      document.addEventListener('DOMContentLoaded', function() {
+        if (window.chatbase) {
+          window.chatbase('setOpenState', true);
+          window.chatbase('setDisplayMode', 'fullscreen');
+        }
+      });
+    </script>
+
     <!-- Fullscreen chatbot overlay (desktop) -->
     <div class="chatbot-overlay" id="chatbotOverlay">
         <!-- Chatbot container -->
@@ -784,8 +797,17 @@
     <script>
       function handleQuoteClick(e) {
         e.preventDefault();
-        // Show fullscreen chatbot overlay for both desktop and mobile
-        openChatbot();
+        var isMobile = window.innerWidth <= 768 || ('ontouchstart' in window);
+        if (window.chatbase) {
+          if (isMobile) {
+            // On mobile: open normal bubble
+            window.chatbase('open');
+          } else {
+            // On desktop: open fullscreen
+            window.chatbase('setDisplayMode', 'fullscreen');
+            window.chatbase('open');
+          }
+        }
       }
 
       function openChatbot() {
