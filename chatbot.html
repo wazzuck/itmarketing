@@ -252,6 +252,9 @@
         @media (max-width: 768px) {
             .fullscreen-header {
                 padding: 10px 16px;
+                flex-shrink: 0;
+                height: auto;
+                min-height: 60px;
             }
 
             .fullscreen-logo span {
@@ -261,6 +264,8 @@
             .fullscreen-contact {
                 gap: 12px;
                 font-size: 0.8rem;
+                flex-wrap: wrap;
+                justify-content: flex-end;
             }
 
             .fullscreen-close {
@@ -280,6 +285,17 @@
             .instructions-text {
                 font-size: 1rem;
             }
+
+            /* Adjust chatbot container for mobile */
+            .fullscreen-chatbot {
+                height: calc(100vh - 60px); /* Subtract header height */
+                position: relative;
+            }
+
+            .fullscreen-iframe {
+                height: 100%;
+                min-height: 0; /* Allow shrinking */
+            }
         }
 
         @media (max-width: 480px) {
@@ -295,6 +311,7 @@
 
             .instructions-content {
                 padding: 20px;
+                max-width: 90%;
             }
 
             .instructions-icon {
@@ -315,6 +332,104 @@
             .timer-text {
                 font-size: 0.9rem;
                 line-height: 1.3;
+            }
+
+            /* Extra small screens */
+            .fullscreen-header {
+                min-height: 55px;
+                padding: 8px 12px;
+            }
+
+            .fullscreen-chatbot {
+                height: calc(100vh - 55px);
+            }
+
+            .fullscreen-phone {
+                font-size: 0.85rem;
+            }
+
+            .fullscreen-close {
+                padding: 5px 10px;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Handle landscape orientation on mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .fullscreen-header {
+                min-height: 50px;
+                padding: 6px 12px;
+            }
+
+            .fullscreen-chatbot {
+                height: calc(100vh - 50px);
+            }
+
+            .instructions-overlay {
+                padding: 15px;
+            }
+
+            .instructions-content {
+                padding: 20px;
+                max-width: 80%;
+            }
+
+            .instructions-title {
+                font-size: 1.3rem;
+                margin-bottom: 10px;
+            }
+
+            .instructions-text {
+                font-size: 0.9rem;
+                margin-bottom: 15px;
+            }
+
+            .timer-display {
+                margin-top: 15px;
+                padding: 10px 16px;
+            }
+        }
+
+        /* Mobile input helper - appears when keyboard is active */
+        .mobile-input-helper {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #f7b318;
+            color: #1d1d1d;
+            padding: 12px 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+            border-top: 2px solid #1d1d1d;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-input-helper.show {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        /* Always show helper on very small screens in portrait */
+        @media (max-width: 480px) and (orientation: portrait) and (max-height: 700px) {
+            .mobile-input-helper {
+                display: block;
+                position: absolute;
+                bottom: 0;
+                background: rgba(247, 179, 24, 0.9);
+                backdrop-filter: blur(5px);
             }
         }
     </style>
@@ -358,6 +473,11 @@
             title="Chat with IToldYouSo Computing - Instant Quote"
             allow="microphone"
         ></iframe>
+    </div>
+
+    <!-- Mobile input helper (shown when keyboard is active) -->
+    <div class="mobile-input-helper" id="mobileInputHelper">
+        💬 Type your message here • Tap outside to close keyboard
     </div>
 
 
@@ -436,7 +556,93 @@
                 } catch (e) {
                     // Cross-origin restriction, ignore
                 }
+                
+                // Add mobile keyboard handling
+                setupMobileKeyboardHandling();
             });
+            
+            // Mobile keyboard handling
+            function setupMobileKeyboardHandling() {
+                const chatbotContainer = document.querySelector('.fullscreen-chatbot');
+                const header = document.querySelector('.fullscreen-header');
+                const mobileInputHelper = document.getElementById('mobileInputHelper');
+                
+                if (!chatbotContainer || !header) return;
+                
+                // Store original heights
+                let originalViewportHeight = window.innerHeight;
+                let originalChatbotHeight = chatbotContainer.style.height;
+                let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                
+                // Handle viewport changes (keyboard showing/hiding)
+                function handleViewportChange() {
+                    const currentViewportHeight = window.innerHeight;
+                    const headerHeight = header.offsetHeight;
+                    
+                    // If viewport height decreased significantly, keyboard is likely open
+                    if (currentViewportHeight < originalViewportHeight * 0.7) {
+                        // Keyboard is open - adjust chatbot height
+                        chatbotContainer.style.height = (currentViewportHeight - headerHeight) + 'px';
+                        
+                        // Show mobile input helper on mobile devices
+                        if (isMobile && mobileInputHelper) {
+                            mobileInputHelper.classList.add('show');
+                        }
+                    } else {
+                        // Keyboard is closed - restore original height
+                        if (originalChatbotHeight) {
+                            chatbotContainer.style.height = originalChatbotHeight;
+                        } else {
+                            // Calculate based on current viewport
+                            chatbotContainer.style.height = (currentViewportHeight - headerHeight) + 'px';
+                        }
+                        
+                        // Hide mobile input helper
+                        if (mobileInputHelper) {
+                            mobileInputHelper.classList.remove('show');
+                        }
+                    }
+                    
+                    // Update original viewport height
+                    originalViewportHeight = currentViewportHeight;
+                }
+                
+                // Listen for resize events (triggered by keyboard on mobile)
+                let resizeTimeout;
+                window.addEventListener('resize', function() {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(handleViewportChange, 100);
+                });
+                
+                // Initial setup
+                handleViewportChange();
+                
+                // Also handle focus/blur events on iframe inputs
+                window.addEventListener('focusin', function(event) {
+                    // If focus is inside iframe, assume keyboard will open
+                    setTimeout(handleViewportChange, 300);
+                });
+                
+                window.addEventListener('focusout', function(event) {
+                    // If focus leaves, keyboard might close
+                    setTimeout(handleViewportChange, 300);
+                });
+                
+                // Close helper when clicked
+                if (mobileInputHelper) {
+                    mobileInputHelper.addEventListener('click', function() {
+                        this.classList.remove('show');
+                        // Try to blur any active input
+                        try {
+                            if (iframe.contentWindow.document.activeElement) {
+                                iframe.contentWindow.document.activeElement.blur();
+                            }
+                        } catch (e) {
+                            // Cross-origin restriction
+                        }
+                    });
+                }
+            }
         });
     </script>
 </body>
