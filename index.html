@@ -282,6 +282,7 @@
             flex-direction: column;
             height: 100vh;
             overflow: hidden;
+            will-change: display;
         }
 
         .chatbot-overlay.active {
@@ -557,7 +558,9 @@
             .chatbot-iframe {
                 width: 100%;
                 border: none;
-                min-height: 1200px;
+                min-height: 800px;
+                height: 100%;
+            }
             }
         }
     </style>
@@ -790,6 +793,8 @@
         if (overlay) {
           overlay.classList.add('active');
           document.body.style.overflow = 'hidden';
+          // Force reflow to ensure animation runs smoothly
+          overlay.offsetHeight;
         }
       }
 
