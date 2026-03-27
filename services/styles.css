@@ -129,7 +129,7 @@ h1 {
 
 .cta-button {
     display: inline-block;
-    background: #f7b318;
+    background: #1d1d1d;
     color: white;
     padding: 16px 40px;
     border-radius: 24px;
@@ -137,16 +137,16 @@ h1 {
     font-size: 1.05rem;
     font-weight: 600;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     border: none;
     cursor: pointer;
     margin-bottom: 16px;
 }
 
 .cta-button:hover {
-    background: #0051bb;
+    background: #333;
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 113, 227, 0.4);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .cta-secondary {
