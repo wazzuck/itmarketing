@@ -90,11 +90,13 @@
             flex-direction: column;
             position: relative;
             overflow: hidden;
+            /* Mobile-specific safe area */
+            padding-bottom: env(safe-area-inset-bottom, 0px);
         }
 
         /* Instructions overlay - appears briefly then fades */
         .instructions-overlay {
-            position: absolute;
+            position: fixed; /* Changed from absolute to fixed */
             top: 0;
             left: 0;
             right: 0;
@@ -105,9 +107,9 @@
             align-items: center;
             justify-content: center;
             padding: 40px;
-            z-index: 1000;
+            z-index: 10000; /* Much higher z-index */
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .instructions-overlay:hover {
@@ -132,7 +134,6 @@
             max-width: 600px;
             text-align: center;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-            animation: slideUp 0.6s ease-out;
             cursor: pointer;
             transition: all 0.2s ease;
         }
@@ -142,16 +143,7 @@
             box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+
 
         .instructions-icon {
             font-size: 4rem;
@@ -244,17 +236,32 @@
             width: 100%;
             border: none;
             display: block;
+            /* Ensure iframe doesn't interfere with mobile UI */
+            -webkit-overflow-scrolling: touch;
+            overflow: auto;
         }
 
 
 
-        /* Mobile adjustments */
+        /* Mobile adjustments - Aggressive fixes for input visibility */
         @media (max-width: 768px) {
+            html, body {
+                height: 100%;
+                overflow: hidden;
+                position: fixed;
+                width: 100%;
+            }
+
             .fullscreen-header {
-                padding: 10px 16px;
+                padding: 8px 12px;
                 flex-shrink: 0;
                 height: auto;
-                min-height: 60px;
+                min-height: 50px;
+                position: sticky;
+                top: 0;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(10px);
+                z-index: 1001;
             }
 
             .fullscreen-logo span {
@@ -262,39 +269,56 @@
             }
 
             .fullscreen-contact {
-                gap: 12px;
-                font-size: 0.8rem;
+                gap: 8px;
+                font-size: 0.75rem;
                 flex-wrap: wrap;
                 justify-content: flex-end;
             }
 
             .fullscreen-close {
-                padding: 6px 12px;
-                font-size: 0.8rem;
+                padding: 5px 10px;
+                font-size: 0.75rem;
+                white-space: nowrap;
             }
 
             .instructions-content {
-                padding: 24px;
-                margin: 20px;
+                padding: 20px;
+                margin: 15px;
+                max-width: 95%;
             }
 
             .instructions-title {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
 
             .instructions-text {
-                font-size: 1rem;
+                font-size: 0.95rem;
             }
 
-            /* Adjust chatbot container for mobile */
+            /* Critical: Ensure chatbot container doesn't extend beyond viewport */
             .fullscreen-chatbot {
-                height: calc(100vh - 60px); /* Subtract header height */
+                height: calc(100vh - 50px) !important;
+                max-height: calc(100vh - 50px) !important;
                 position: relative;
+                overflow: hidden;
             }
 
             .fullscreen-iframe {
-                height: 100%;
-                min-height: 0; /* Allow shrinking */
+                height: 100% !important;
+                min-height: 0;
+                position: relative;
+                /* Allow scrolling within iframe */
+                -webkit-overflow-scrolling: touch;
+                overflow: auto;
+            }
+
+            /* Force iframe to show bottom content */
+            .fullscreen-iframe::after {
+                content: '';
+                display: block;
+                height: 60px; /* Space for input box */
+                width: 100%;
+                pointer-events: none;
             }
         }
 
@@ -390,48 +414,7 @@
             }
         }
 
-        /* Mobile input helper - appears when keyboard is active */
-        .mobile-input-helper {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #f7b318;
-            color: #1d1d1d;
-            padding: 12px 15px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-align: center;
-            z-index: 1000;
-            display: none;
-            border-top: 2px solid #1d1d1d;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-        }
 
-        .mobile-input-helper.show {
-            display: block;
-            animation: slideUp 0.3s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(100%);
-            }
-            to {
-                transform: translateY(0);
-            }
-        }
-
-        /* Always show helper on very small screens in portrait */
-        @media (max-width: 480px) and (orientation: portrait) and (max-height: 700px) {
-            .mobile-input-helper {
-                display: block;
-                position: absolute;
-                bottom: 0;
-                background: rgba(247, 179, 24, 0.9);
-                backdrop-filter: blur(5px);
-            }
-        }
     </style>
 </head>
 <body>
@@ -475,174 +458,58 @@
         ></iframe>
     </div>
 
-    <!-- Mobile input helper (shown when keyboard is active) -->
-    <div class="mobile-input-helper" id="mobileInputHelper">
-        💬 Type your message here • Tap outside to close keyboard
-    </div>
+
 
 
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const instructionsOverlay = document.getElementById('instructionsOverlay');
-            const timerCount = document.getElementById('timerCount');
+            const overlay = document.getElementById('instructionsOverlay');
+            const timer = document.getElementById('timerCount');
             
-            let countdown = 8; // Start with 8 seconds
+            if (!overlay) return;
+            
+            let countdown = 8;
             let timerInterval;
             
-            // Start the countdown timer
-            function startCountdown() {
+            // Timer function
+            function startTimer() {
                 timerInterval = setInterval(() => {
                     countdown--;
-                    timerCount.textContent = countdown;
+                    if (timer) timer.textContent = countdown;
                     
                     if (countdown <= 0) {
                         clearInterval(timerInterval);
-                        hideOverlay();
+                        hideNow();
                     }
                 }, 1000);
             }
             
-            // Hide the overlay with fade animation
-            function hideOverlay() {
+            // Start timer
+            startTimer();
+            
+            function hideNow() {
                 clearInterval(timerInterval);
-                instructionsOverlay.classList.add('fade-out');
+                overlay.classList.add('fade-out');
                 
-                // Remove from DOM after animation completes
                 setTimeout(() => {
-                    instructionsOverlay.style.display = 'none';
+                    overlay.style.display = 'none';
                 }, 500);
             }
             
-            // Hide instructions overlay when clicked
-            instructionsOverlay.addEventListener('click', function(event) {
-                console.log('Overlay clicked, target:', event.target.tagName);
-                // Only hide if clicking directly on the overlay (not on child elements that might have their own handlers)
-                if (event.target === instructionsOverlay) {
-                    console.log('Hiding overlay');
-                    hideOverlay();
-                }
-            });
-            
-            // Also allow clicking on the timer display to dismiss
-            const timerDisplay = document.querySelector('.timer-display');
-            if (timerDisplay) {
-                timerDisplay.addEventListener('click', function(event) {
-                    console.log('Timer display clicked');
-                    event.stopPropagation(); // Prevent bubbling to overlay
-                    hideOverlay();
-                });
+            function handleAnyClick(event) {
+                hideNow();
+                event.preventDefault();
+                return false;
             }
             
-            // Allow clicking on the instructions content to dismiss
-            const instructionsContent = document.querySelector('.instructions-content');
-            if (instructionsContent) {
-                instructionsContent.addEventListener('click', function(event) {
-                    console.log('Instructions content clicked');
-                    event.stopPropagation(); // Prevent bubbling to overlay
-                    hideOverlay();
-                });
-            }
+            overlay.addEventListener('click', handleAnyClick);
+            overlay.addEventListener('touchstart', handleAnyClick);
             
             // Start the countdown when page loads
             startCountdown();
             
             // Focus the iframe for better accessibility
-            const iframe = document.querySelector('.fullscreen-iframe');
-            iframe.addEventListener('load', function() {
-                // Try to focus the iframe (may be restricted by cross-origin policies)
-                try {
-                    iframe.contentWindow.focus();
-                } catch (e) {
-                    // Cross-origin restriction, ignore
-                }
-                
-                // Add mobile keyboard handling
-                setupMobileKeyboardHandling();
-            });
-            
-            // Mobile keyboard handling
-            function setupMobileKeyboardHandling() {
-                const chatbotContainer = document.querySelector('.fullscreen-chatbot');
-                const header = document.querySelector('.fullscreen-header');
-                const mobileInputHelper = document.getElementById('mobileInputHelper');
-                
-                if (!chatbotContainer || !header) return;
-                
-                // Store original heights
-                let originalViewportHeight = window.innerHeight;
-                let originalChatbotHeight = chatbotContainer.style.height;
-                let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                
-                // Handle viewport changes (keyboard showing/hiding)
-                function handleViewportChange() {
-                    const currentViewportHeight = window.innerHeight;
-                    const headerHeight = header.offsetHeight;
-                    
-                    // If viewport height decreased significantly, keyboard is likely open
-                    if (currentViewportHeight < originalViewportHeight * 0.7) {
-                        // Keyboard is open - adjust chatbot height
-                        chatbotContainer.style.height = (currentViewportHeight - headerHeight) + 'px';
-                        
-                        // Show mobile input helper on mobile devices
-                        if (isMobile && mobileInputHelper) {
-                            mobileInputHelper.classList.add('show');
-                        }
-                    } else {
-                        // Keyboard is closed - restore original height
-                        if (originalChatbotHeight) {
-                            chatbotContainer.style.height = originalChatbotHeight;
-                        } else {
-                            // Calculate based on current viewport
-                            chatbotContainer.style.height = (currentViewportHeight - headerHeight) + 'px';
-                        }
-                        
-                        // Hide mobile input helper
-                        if (mobileInputHelper) {
-                            mobileInputHelper.classList.remove('show');
-                        }
-                    }
-                    
-                    // Update original viewport height
-                    originalViewportHeight = currentViewportHeight;
-                }
-                
-                // Listen for resize events (triggered by keyboard on mobile)
-                let resizeTimeout;
-                window.addEventListener('resize', function() {
-                    clearTimeout(resizeTimeout);
-                    resizeTimeout = setTimeout(handleViewportChange, 100);
-                });
-                
-                // Initial setup
-                handleViewportChange();
-                
-                // Also handle focus/blur events on iframe inputs
-                window.addEventListener('focusin', function(event) {
-                    // If focus is inside iframe, assume keyboard will open
-                    setTimeout(handleViewportChange, 300);
-                });
-                
-                window.addEventListener('focusout', function(event) {
-                    // If focus leaves, keyboard might close
-                    setTimeout(handleViewportChange, 300);
-                });
-                
-                // Close helper when clicked
-                if (mobileInputHelper) {
-                    mobileInputHelper.addEventListener('click', function() {
-                        this.classList.remove('show');
-                        // Try to blur any active input
-                        try {
-                            if (iframe.contentWindow.document.activeElement) {
-                                iframe.contentWindow.document.activeElement.blur();
-                            }
-                        } catch (e) {
-                            // Cross-origin restriction
-                        }
-                    });
-                }
-            }
         });
     </script>
 </body>
