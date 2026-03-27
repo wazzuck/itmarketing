@@ -287,7 +287,7 @@
         <p class="hero-sub">Fast, local help for businesses and busy households. – one call does it all.</p>
         <div class="hero-buttons">
             <a href="tel:07809590652" class="btn-primary">📞 Call Now: 07809590652</a>
-            <a href="chatbot.html" class="btn-secondary">💬 Get an Instant Quote</a>
+            <a href="chatbot.html" class="btn-secondary" id="quote-btn" onclick="handleQuoteClick(event)">💬 Get an Instant Quote</a>
         </div>
         <div class="trust-badge">
             <span>✅ Often same‑day, always within 24h</span>
@@ -468,5 +468,23 @@
     <footer>
         © <i>IT</i>oldYouSo Computing | Professional Technology Solutions
     </footer>
+
+    <!-- Chatbase bubble widget (used on mobile for instant quote) -->
+    <script>
+      (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="0bcLr7pcOs9kBCHuQuIWD";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+    </script>
+
+    <script>
+      function handleQuoteClick(e) {
+        var isMobile = window.innerWidth <= 768 || ('ontouchstart' in window);
+        if (isMobile) {
+          e.preventDefault();
+          if (window.chatbase) {
+            window.chatbase('open');
+          }
+        }
+        // On desktop: let the default href navigate to chatbot.html
+      }
+    </script>
 </body>
 </html>
