@@ -213,10 +213,7 @@ footer {
     }
 
     .phone-info {
-        align-items: center;
-        flex-direction: column;
-        gap: 4px;
-        width: 100%;
+        display: none;
     }
 
     .phone-number {
